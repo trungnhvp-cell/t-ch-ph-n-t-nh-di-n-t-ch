@@ -1,0 +1,1699 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ứng dụng tích phân – Diện tích hình phẳng | Thầy Nguyễn Hữu Trung – THPT Trần Phú</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<style>
+  :root{
+    --bg:#FBFBF9; --ink:#1f2937; --muted:#6b7280; --line:#e5e7eb;
+    --accent:#1F6F5C; --accent-2:#145246; --warn:#D97A3A;
+    --ok:#2E7D32; --bad:#C0392B; --hint:#FFF3CD; --card:#ffffff;
+    --radius:14px; --shadow:0 4px 18px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.65;font-size:16px}
+  a{color:var(--accent);text-decoration:none}
+  a:hover{text-decoration:underline}
+  header{background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+  .nav{max-width:1080px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+  .brand{font-weight:800;color:var(--accent);font-size:1.1rem;letter-spacing:.02em;line-height:1.2}
+  .brand-sub{font-weight:500;color:var(--muted);font-size:.72rem;letter-spacing:0;margin-top:2px}
+  .brand-sub strong{color:var(--accent-2);font-weight:700}
+  .nav-links{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+  .nav-links button{background:none;border:none;padding:8px 14px;border-radius:8px;font-weight:600;color:var(--muted);cursor:pointer;font-size:.92rem;transition:.15s}
+  .nav-links button:hover{background:#F3F4F6;color:var(--ink)}
+  .nav-links button.active{background:#E8F3EF;color:var(--accent)}
+  main{max-width:1080px;margin:0 auto;padding:28px 20px 40px}
+  .page{display:none;animation:fade .25s ease}
+  .page.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h1{font-size:1.65rem;margin:0 0 6px;letter-spacing:-.01em}
+  h2{font-size:1.25rem;margin:0 0 12px;letter-spacing:-.01em}
+  h3{font-size:1.05rem;margin:0 0 8px}
+  .sub{color:var(--muted);margin:0 0 24px;font-size:.97rem}
+  .card{background:var(--card);border-radius:var(--radius);padding:22px 24px;box-shadow:var(--shadow);margin-bottom:18px}
+  .tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:99px;background:#E8F3EF;color:var(--accent);margin-bottom:12px}
+  .tag.warn{background:#FCEEE2;color:var(--warn)}
+  .tag.bad{background:#FBEAEA;color:var(--bad)}
+  .tag.ok{background:#E7F4E8;color:var(--ok)}
+  .muted{color:var(--muted);font-size:.9rem}
+  .small{font-size:.85rem;color:var(--muted)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}
+  button{font-family:inherit;border:none;border-radius:10px;padding:10px 16px;font-weight:600;font-size:.92rem;cursor:pointer;transition:.15s}
+  button:active{transform:scale(.98)}
+  button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+  .btn-main{background:var(--accent);color:#fff}
+  .btn-main:hover:not(:disabled){background:var(--accent-2)}
+  .btn-ghost{background:#fff;color:var(--accent);border:1.5px solid var(--accent)}
+  .btn-warn{background:#fff;color:var(--warn);border:1.5px solid var(--warn)}
+  .btn-dark{background:#1f2937;color:#fff}
+  .btn-danger{background:#fff;color:var(--bad);border:1.5px solid var(--bad)}
+  .btn-sm{padding:7px 12px;font-size:.85rem}
+  input[type=text],input[type=password],textarea,select{font-family:inherit;padding:10px 14px;border:1.5px solid #d1d5db;border-radius:10px;font-size:.95rem;outline:none;background:#fff;width:100%}
+  input[type=text]:focus,input[type=password]:focus,textarea:focus,select:focus{border-color:var(--accent)}
+  textarea{resize:vertical;min-height:60px}
+  .feedback{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:.93rem;display:none}
+  .feedback.show{display:block}
+  .feedback.ok{background:#E7F4E8;color:#1B5E20;border-left:4px solid var(--ok)}
+  .feedback.bad{background:#FBEAEA;color:#8E1C1C;border-left:4px solid var(--bad)}
+  .hint-box{background:var(--hint);border-left:4px solid var(--warn);padding:12px 14px;border-radius:0 10px 10px 0;margin:8px 0;font-size:.93rem;display:none}
+  .hint-box.show{display:block;animation:fade .2s ease}
+  .ai-out{margin-top:12px;padding:14px;background:#F3F6F5;border-radius:10px;font-size:.92rem;display:none;white-space:pre-wrap;border:1px solid #e0e8e5}
+  .ai-out.show{display:block}
+  .progress-bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:6px 0 18px}
+  .progress-bar > div{height:100%;background:var(--accent);width:0;transition:.3s}
+  .grid{display:grid;grid-template-columns:1fr;gap:14px}
+  @media(min-width:720px){
+    .grid.g2{grid-template-columns:1fr 1fr}
+    .grid.g3{grid-template-columns:1fr 1fr 1fr}
+  }
+  .hero{background:linear-gradient(135deg,#1F6F5C 0%,#2a8a72 100%);color:#fff;padding:38px 28px;border-radius:18px;margin-bottom:24px;box-shadow:var(--shadow)}
+  .hero h1{color:#fff;font-size:1.9rem;margin-bottom:8px}
+  .hero p{color:#d9ede7;margin:0 0 16px;max-width:600px}
+  .hero .row{margin-top:0}
+  .hero .btn-main{background:#fff;color:var(--accent)}
+  .hero .btn-ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.6)}
+  .hero .btn-ghost:hover{background:rgba(255,255,255,.1)}
+  .katex{font-size:1.02em}
+  .katex-display{margin:.5em 0}
+  .figure{background:#FAFAF7;border-radius:12px;padding:12px;text-align:center;border:1px dashed #d6d3cd;margin:10px 0}
+  .figure svg{max-width:100%;height:auto}
+  .q-num{display:inline-block;min-width:28px;height:28px;line-height:28px;text-align:center;border-radius:8px;background:#E8F3EF;color:var(--accent);font-weight:700;font-size:.85rem;margin-right:10px}
+  .q-text{font-weight:500}
+  .option{display:flex;align-items:center;gap:10px;padding:10px 14px;border:1.5px solid var(--line);border-radius:10px;cursor:pointer;margin:6px 0;background:#fff;transition:.12s}
+  .option:hover{border-color:#c9d1cf;background:#FAFBF9}
+  .option.selected{border-color:var(--accent);background:#F0F8F5}
+  .option input{margin:0}
+  .tf-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px dashed var(--line)}
+  .tf-row:last-child{border-bottom:none}
+  .tf-row .lab{flex:1;font-size:.93rem}
+  .tf-btn{padding:6px 14px;border-radius:8px;border:1.5px solid var(--line);background:#fff;font-size:.85rem;font-weight:600;cursor:pointer;color:var(--muted)}
+  .tf-btn.true.active{background:#E7F4E8;color:var(--ok);border-color:var(--ok)}
+  .tf-btn.false.active{background:#FBEAEA;color:var(--bad);border-color:var(--bad)}
+  .timer{position:fixed;top:70px;right:20px;background:#1f2937;color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;font-family:'Courier New',monospace;font-size:1rem;box-shadow:var(--shadow);z-index:49;display:none}
+  .timer.show{display:block}
+  .timer.warn{background:var(--bad);animation:pulse 1.2s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.75}}
+  .score-box{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+  .score-item{background:#fff;padding:16px;border-radius:12px;text-align:center;border:1px solid var(--line)}
+  .score-item .num{font-size:1.5rem;font-weight:800;color:var(--accent)}
+  .score-item .lab{font-size:.82rem;color:var(--muted)}
+  .exam-part{margin-bottom:20px}
+  .exam-part-title{background:#F3F6F5;padding:10px 16px;border-radius:10px;font-weight:700;font-size:.95rem;color:var(--accent);margin-bottom:12px}
+  .badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:.78rem;font-weight:700;background:#E8F3EF;color:var(--accent);margin-left:6px}
+  .form-field{margin-bottom:14px}
+  .form-field label{display:block;font-weight:600;font-size:.88rem;margin-bottom:5px;color:var(--ink)}
+  .form-field .hinttext{font-size:.8rem;color:var(--muted);margin-top:3px}
+  .teacher-tabs{display:flex;gap:6px;border-bottom:2px solid var(--line);margin-bottom:18px;flex-wrap:wrap}
+  .teacher-tabs button{background:none;border:none;padding:10px 16px;font-weight:600;color:var(--muted);border-bottom:2px solid transparent;margin-bottom:-2px;border-radius:0}
+  .teacher-tabs button.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .teacher-tab-panel{display:none}
+  .teacher-tab-panel.active{display:block}
+  .bank-item{padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:#FAFBF9}
+  .bank-item .bank-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+  .bank-item .bank-type{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;padding:2px 8px;border-radius:6px;background:#E8F3EF;color:var(--accent)}
+  .option-row{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .option-row .opt-label{font-weight:700;min-width:20px}
+  .option-row input[type=text]{flex:1}
+  .option-row input[type=radio]{width:auto;transform:scale(1.3)}
+  .tab-list{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+
+  /* ========== PROGRESS TREE ========== */
+  .progress-tree-wrap{background:linear-gradient(180deg,#F0F8F5 0%,#fff 100%)}
+  .progress-tree{display:flex;flex-direction:column;align-items:stretch;margin-top:20px}
+  .pt-stage{position:relative;display:flex;flex-direction:column;align-items:center}
+  .pt-node{position:relative;display:flex;align-items:center;gap:14px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:14px 18px;width:100%;max-width:520px;cursor:pointer;transition:.2s;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+  .pt-node:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.08)}
+  .pt-node .pt-emoji{font-size:1.6rem;line-height:1;flex-shrink:0}
+  .pt-node .pt-body{flex:1;min-width:0}
+  .pt-node .pt-title{font-weight:700;font-size:1rem;color:var(--ink)}
+  .pt-node .pt-sub{font-size:.82rem;color:var(--muted);margin-top:2px}
+  .pt-node .pt-badge{font-weight:700;font-size:.85rem;padding:4px 10px;border-radius:8px;background:#F3F4F6;color:var(--muted);flex-shrink:0}
+  .pt-node .pt-check{display:none;font-size:1.2rem;color:var(--ok);font-weight:800;flex-shrink:0}
+  .pt-node.done{background:#F0F8F5;border-color:var(--ok)}
+  .pt-node.done .pt-badge{background:#E7F4E8;color:var(--ok)}
+  .pt-node.done .pt-check{display:block}
+  .pt-node.current{border-color:var(--accent);border-width:3px;box-shadow:0 0 0 4px rgba(31,111,92,.15);animation:ptPulse 2s infinite}
+  .pt-node.current .pt-badge{background:#E8F3EF;color:var(--accent)}
+  .pt-node.current::after{content:'Bạn đang ở đây';position:absolute;top:-11px;right:14px;background:var(--accent);color:#fff;font-size:.68rem;font-weight:800;padding:3px 10px;border-radius:99px;letter-spacing:.04em;text-transform:uppercase}
+  @keyframes ptPulse{0%,100%{box-shadow:0 0 0 4px rgba(31,111,92,.18)}50%{box-shadow:0 0 0 9px rgba(31,111,92,.06)}}
+  .pt-connector{width:2px;height:22px;background:var(--line);position:relative}
+  .pt-connector.done{background:var(--ok)}
+  .pt-children{display:flex;gap:8px;margin:10px 0 0;justify-content:center;flex-wrap:wrap;max-width:520px}
+  .pt-leaf{display:flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--line);border-radius:99px;padding:5px 12px;font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer;transition:.15s}
+  .pt-leaf:hover{border-color:var(--accent);color:var(--accent)}
+  .pt-leaf.done{background:#E7F4E8;border-color:var(--ok);color:var(--ok)}
+  .pt-leaf .pt-leaf-dot{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.35}
+  .pt-leaf.done .pt-leaf-dot{opacity:1}
+  .pt-complete-banner{margin-top:16px;padding:16px 18px;border-radius:12px;background:linear-gradient(135deg,#E7F4E8,#F0F8F5);border:1.5px solid var(--ok);font-weight:600;color:#1B5E20;text-align:center;display:none}
+  .pt-complete-banner.show{display:block;animation:fade .3s ease}
+
+  /* ========== KNOWLEDGE CHECKBOX ========== */
+  .know-done-row{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line)}
+  .know-check-wrap{display:inline-flex;align-items:center;gap:10px;cursor:pointer;padding:9px 16px;border-radius:10px;background:#F3F6F5;font-weight:600;font-size:.9rem;color:var(--muted);transition:.15s;user-select:none;border:1.5px solid transparent}
+  .know-check-wrap:hover{background:#E8F3EF;color:var(--accent)}
+  .know-check-wrap input{width:18px;height:18px;cursor:pointer;accent-color:var(--accent);margin:0}
+  .know-check-wrap.checked{background:#E7F4E8;color:var(--ok);border-color:var(--ok)}
+
+  /* ========== API KEY GUIDE ========== */
+  .api-guide-step{display:flex;gap:14px;padding:14px 0;border-bottom:1px dashed var(--line)}
+  .api-guide-step:last-child{border-bottom:none}
+  .api-step-num{flex-shrink:0;width:32px;height:32px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:.9rem;display:flex;align-items:center;justify-content:center}
+  .api-guide-step .step-body{flex:1;min-width:0}
+  .api-guide-step .step-body strong{display:block;margin-bottom:2px;color:var(--ink)}
+  .api-guide-step .step-body p{margin:0;font-size:.9rem;color:var(--muted)}
+  .api-guide-callout{background:#FFF8E1;border-left:4px solid var(--warn);padding:12px 14px;border-radius:0 10px 10px 0;margin:14px 0;font-size:.9rem}
+  .api-guide-note{background:#F3F6F5;border-radius:10px;padding:12px 14px;font-size:.85rem;color:var(--muted);margin-top:14px}
+  .api-key-badge{display:inline-block;background:#1f2937;color:#fff;padding:4px 10px;border-radius:6px;font-family:'Courier New',monospace;font-size:.8rem;letter-spacing:.02em}
+
+  /* ========== FOOTER ========== */
+  .site-footer{margin-top:40px;padding:26px 22px;background:linear-gradient(135deg,#F3F6F5 0%,#FAFBF9 100%);border-radius:16px;text-align:center;border:1px solid var(--line)}
+  .footer-brand{font-weight:800;color:var(--accent);font-size:1.05rem;margin-bottom:8px;letter-spacing:.01em}
+  .footer-author{font-size:.98rem;margin-bottom:4px;color:var(--ink)}
+  .footer-author strong{color:var(--accent-2)}
+  .footer-school{font-size:.9rem;color:var(--muted);margin-bottom:10px}
+  .footer-school a{color:var(--accent);font-weight:700}
+  .footer-note{font-size:.8rem;color:var(--muted);border-top:1px dashed var(--line);padding-top:10px;margin-top:8px}
+
+  /* ========== PRINT ========== */
+  @media print {
+    body{background:#fff !important;font-size:11pt}
+    header, .nav, .timer, .hero, .no-print, button, .btn-main, .btn-ghost, .btn-warn, .btn-dark, .btn-danger, .ai-out, .site-footer, .progress-tree-wrap, .know-done-row, .api-guide-step, .api-guide-callout, .api-guide-note { display:none !important; }
+    .page { display:none !important; }
+    #printContent { display:block !important; }
+    .card { box-shadow:none !important; border:none !important; padding:0 !important; margin:0 0 8mm 0 !important; }
+    .exam-part-title { background:#f0f0f0 !important; color:#000 !important; padding:4mm !important; margin:0 0 4mm 0 !important; font-size:12pt; }
+    .q-num { background:#eee !important; color:#000 !important; }
+    .option { border:1px solid #bbb !important; padding:4px 8px !important; }
+    .tf-row { border-bottom:1px dotted #ccc !important; }
+    h2,h3 { color:#000 !important; }
+    .print-header { text-align:center; margin-bottom:6mm; border-bottom:2px solid #000; padding-bottom:3mm; }
+    .print-header h1 { font-size:15pt; margin:0 0 2mm 0; color:#000; }
+    .print-header p { margin:0; font-size:10pt; color:#333; }
+    .print-footer { margin-top:8mm; text-align:center; font-size:9pt; color:#666; border-top:1px solid #bbb; padding-top:3mm; }
+    .page-break { page-break-before:always; }
+  }
+  #printContent { display:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <div class="brand">
+      ∫ Tích phân &amp; Diện tích
+      <div class="brand-sub">Thiết kế bởi <strong>Thầy Nguyễn Hữu Trung</strong> · THPT Trần Phú · 0964 848 989</div>
+    </div>
+    <nav class="nav-links">
+      <button data-page="home" class="active">Trang chủ</button>
+      <button data-page="knowledge">Lý thuyết</button>
+      <button data-page="practice">Luyện tập</button>
+      <button data-page="exam">Kiểm tra</button>
+      <button data-page="teacher">Giáo viên</button>
+      <button data-page="settings">Cài đặt &amp; API Key</button>
+    </nav>
+  </div>
+</header>
+
+<div class="timer" id="timer">90:00</div>
+
+<main>
+
+<!-- ==================== HOME ==================== -->
+<section id="page-home" class="page active">
+  <div class="hero">
+    <h1>Ôn tập ứng dụng tích phân – Diện tích hình phẳng</h1>
+    <p>Lộ trình 3 bước: nắm lý thuyết → luyện 30 bài (gợi ý 3 bậc) → kiểm tra 3 đề 30 câu có tính giờ. Tích hợp trợ lý Gemini giải thích lỗi sai, xuất đề PDF và chế độ Giáo viên.</p>
+    <div class="row">
+      <button class="btn-main" data-page="knowledge">Bắt đầu học lý thuyết</button>
+      <button class="btn-ghost" data-page="practice">Luyện tập ngay</button>
+    </div>
+  </div>
+
+  <div class="card progress-tree-wrap" id="progressTreeCard">
+    <div class="row" style="justify-content:space-between;margin-top:0">
+      <div>
+        <span class="tag">Tiến trình học tập</span>
+        <h2 style="margin:0">Bản đồ học tập của bạn</h2>
+        <p class="muted" style="margin:6px 0 0">Nhìn vào sơ đồ để biết mình đang ở bước nào và cần làm gì tiếp theo.</p>
+      </div>
+      <button class="btn-ghost btn-sm" onclick="resetProgress()">Đặt lại tiến trình</button>
+    </div>
+    <div class="progress-tree" id="progressTree"></div>
+    <div class="pt-complete-banner" id="ptCompleteBanner">🏆 Chúc mừng! Bạn đã hoàn thành toàn bộ lộ trình học tập.</div>
+  </div>
+
+  <div class="grid g3">
+    <div class="card">
+      <span class="tag">Bước 1</span>
+      <h3>Kiến thức nền</h3>
+      <p class="muted">3 thẻ lý thuyết có hình vẽ SVG: diện tích dưới một đường cong, giữa hai đường cong, mô hình thực tế parabol.</p>
+      <button class="btn-ghost btn-sm" data-page="knowledge">Mở lý thuyết</button>
+    </div>
+    <div class="card">
+      <span class="tag warn">Bước 2</span>
+      <h3>Luyện tập 3 nhóm</h3>
+      <p class="muted">30 bài từ dễ đến khó, mỗi bài có 3 gợi ý mở dần. Chấm đáp án, chỉ lỗi sai và định hướng ôn tập.</p>
+      <button class="btn-ghost btn-sm" data-page="practice">Vào luyện tập</button>
+    </div>
+    <div class="card">
+      <span class="tag bad">Bước 3</span>
+      <h3>Kiểm tra 3 đề</h3>
+      <p class="muted">Mỗi đề 30 câu – 90 phút: 16 TN + 6 Đ/S + 8 TL ngắn. Xuất PDF đề thi, xem điểm và phân tích lỗi sau khi nộp.</p>
+      <button class="btn-ghost btn-sm" data-page="exam">Thi thử</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag">Trợ lý AI</span>
+    <h3>Gemini giải thích lời giải</h3>
+    <p class="muted">Sau khi kiểm tra hoặc nộp bài, bấm <strong>“Hỏi Gemini vì sao sai”</strong> tại mỗi câu. AI sẽ chỉ ra lỗi cụ thể và hướng dẫn sửa, không làm bài thay em.</p>
+    <p class="small">Chưa có API key? Vào <a href="#" onclick="gotoPage('settings'); return false;">Cài đặt &amp; API Key</a> để xem hướng dẫn lấy key miễn phí từ Google AI Studio.</p>
+  </div>
+</section>
+
+<!-- ==================== KNOWLEDGE ==================== -->
+<section id="page-knowledge" class="page">
+  <h1>Kiến thức cơ bản</h1>
+  <p class="sub">Ba thẻ lý thuyết có hình vẽ minh họa và giải thích công thức. Đánh dấu "Tôi đã hiểu bài này" để cập nhật tiến trình.</p>
+
+  <div class="card">
+    <span class="tag">Thẻ 1</span>
+    <h2>Diện tích giới hạn bởi một đường cong và trục hoành</h2>
+    <div class="figure">
+      <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#1F6F5C" stop-opacity=".35"/><stop offset="100%" stop-color="#1F6F5C" stop-opacity=".05"/></linearGradient></defs>
+        <line x1="30" y1="170" x2="390" y2="170" stroke="#333" stroke-width="1.4"/>
+        <line x1="30" y1="30" x2="30" y2="190" stroke="#333" stroke-width="1.4"/>
+        <text x="384" y="186" font-size="12" fill="#333">x</text><text x="14" y="34" font-size="12" fill="#333">y</text>
+        <path d="M 60 170 Q 200 20 340 170" stroke="#1F6F5C" stroke-width="2.4" fill="url(#g1)"/>
+        <text x="54" y="188" font-size="13" fill="#1F6F5C" font-weight="700">a</text>
+        <text x="332" y="188" font-size="13" fill="#1F6F5C" font-weight="700">b</text>
+        <text x="196" y="60" font-size="13" fill="#333" font-weight="600">y = f(x)</text>
+      </svg>
+    </div>
+    <p><strong>Công thức:</strong></p>
+    <p>\[
+S=\int_a^b |f(x)|\,\mathrm{d}x
+\]</p>
+    <p><strong>Giải thích:</strong> Nếu \(f(x)\ge 0\) trên \([a;b]\) thì \(S=\int_a^b f(x)\,\mathrm{d}x\); nếu \(f(x)\le 0\) thì \(S=-\int_a^b f(x)\,\mathrm{d}x\). Khi \(f(x)\) đổi dấu, phải tách khoảng hoặc dùng trị tuyệt đối – đó là tổng "độ lớn" các mảnh diện tích.</p>
+    <div class="know-done-row">
+      <label class="know-check-wrap">
+        <input type="checkbox" data-know="1">
+        <span>Tôi đã hiểu bài này</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag">Thẻ 2</span>
+    <h2>Diện tích giữa hai đường cong</h2>
+    <div class="figure">
+      <svg viewBox="0 0 420 240" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g2" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#D97A3A" stop-opacity=".35"/><stop offset="100%" stop-color="#1F6F5C" stop-opacity=".35"/></linearGradient></defs>
+        <line x1="30" y1="180" x2="390" y2="180" stroke="#333" stroke-width="1.4"/>
+        <line x1="30" y1="30" x2="30" y2="200" stroke="#333" stroke-width="1.4"/>
+        <text x="384" y="196" font-size="12" fill="#333">x</text><text x="14" y="34" font-size="12" fill="#333">y</text>
+        <path d="M 70 180 Q 190 30 350 180" stroke="#1F6F5C" stroke-width="2.2" fill="none"/>
+        <path d="M 70 60 Q 200 200 350 60" stroke="#D97A3A" stroke-width="2.2" fill="none"/>
+        <path d="M 110 120 Q 210 60 310 120 Q 210 180 110 120 Z" fill="url(#g2)" opacity=".8"/>
+        <circle cx="110" cy="120" r="3.5" fill="#111"/><circle cx="310" cy="120" r="3.5" fill="#111"/>
+        <text x="96" y="140" font-size="12" fill="#111" font-weight="700">a</text>
+        <text x="304" y="140" font-size="12" fill="#111" font-weight="700">b</text>
+        <text x="330" y="120" font-size="12" fill="#1F6F5C" font-weight="700">y=f(x)</text>
+        <text x="330" y="90" font-size="12" fill="#D97A3A" font-weight="700">y=g(x)</text>
+      </svg>
+    </div>
+    <p><strong>Công thức:</strong></p>
+    <p>\[
+S=\int_a^b |f(x)-g(x)|\,\mathrm{d}x
+\]</p>
+    <p><strong>Giải thích:</strong> Tìm hoành độ giao điểm \(a,b\) (và các giao điểm trung gian nếu có) bằng cách giải \(f(x)=g(x)\). Trên mỗi khoảng giữa hai giao điểm liên tiếp, \(f(x)-g(x)\) không đổi dấu, nên có thể bỏ trị tuyệt đối bằng cách xét dấu.</p>
+    <div class="know-done-row">
+      <label class="know-check-wrap">
+        <input type="checkbox" data-know="2">
+        <span>Tôi đã hiểu bài này</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <span class="tag">Thẻ 3</span>
+    <h2>Bài toán thực tế: mô hình hóa bằng parabol</h2>
+    <div class="figure">
+      <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+        <defs><linearGradient id="g3" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#1F6F5C" stop-opacity=".45"/><stop offset="100%" stop-color="#1F6F5C" stop-opacity=".05"/></linearGradient></defs>
+        <line x1="20" y1="190" x2="400" y2="190" stroke="#333" stroke-width="1.4"/>
+        <line x1="210" y1="20" x2="210" y2="200" stroke="#333" stroke-width="1.2" stroke-dasharray="4 3"/>
+        <path d="M 60 190 Q 210 0 360 190 Z" fill="url(#g3)" stroke="#1F6F5C" stroke-width="2.4"/>
+        <text x="378" y="200" font-size="12" fill="#333">x</text><text x="218" y="34" font-size="12" fill="#333">y</text>
+        <text x="52" y="206" font-size="13" fill="#1F6F5C" font-weight="700">−W/2</text>
+        <text x="340" y="206" font-size="13" fill="#1F6F5C" font-weight="700">W/2</text>
+        <text x="196" y="14" font-size="13" fill="#1F6F5C" font-weight="700">H</text>
+      </svg>
+    </div>
+    <p><strong>Ý tưởng:</strong> Cổng hầm, mái vòm, nóc nhà kho, biển quảng cáo… thường quy về diện tích hình phẳng giới hạn bởi parabol và trục hoành.</p>
+    <p><strong>Các bước:</strong> Gắn hệ trục với \(Ox\) là mặt nền, \(Oy\) là trục đối xứng. Parabol dạng \(y=ax^2+c\) với đỉnh \((0;H)\), chân \((\pm W/2;0)\).</p>
+    <p>\[
+S=\int_{-W/2}^{W/2}\!\Big(H-\tfrac{4H}{W^2}x^2\Big)\mathrm{d}x=\frac{2}{3}WH
+\]</p>
+    <p><strong>Ghi nhớ:</strong> Parabol rộng \(W\), cao \(H\) → \(S=\dfrac{2}{3}WH\).</p>
+    <div class="know-done-row">
+      <label class="know-check-wrap">
+        <input type="checkbox" data-know="3">
+        <span>Tôi đã hiểu bài này</span>
+      </label>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== PRACTICE ==================== -->
+<section id="page-practice" class="page">
+  <h1>Luyện tập – 3 nhóm × 10 bài</h1>
+  <p class="sub">Mỗi bài có 3 gợi ý mở dần khi em yêu cầu. Sau khi kiểm tra, hệ thống chỉ rõ lỗi sai và định hướng ôn tập.</p>
+  <div id="practiceContent"></div>
+</section>
+
+<!-- ==================== EXAM ==================== -->
+<section id="page-exam" class="page">
+  <h1>Kiểm tra – 3 đề × 30 câu</h1>
+  <p class="sub">Cấu trúc đề tốt nghiệp THPT: 16 câu TN + 6 câu Đúng/Sai + 8 câu trả lời ngắn. Thời gian 90 phút. Xuất PDF đề thi trước khi làm nếu muốn in.</p>
+  <div id="examContent"></div>
+</section>
+
+<!-- ==================== TEACHER ==================== -->
+<section id="page-teacher" class="page">
+  <h1>Chế độ Giáo viên</h1>
+  <p class="sub">Tự soạn câu hỏi mới, lưu vào ngân hàng riêng trong trình duyệt, xuất/nhập JSON để chia sẻ hoặc chuyển máy.</p>
+
+  <div class="card">
+    <div class="teacher-tabs">
+      <button data-ttab="mcq" class="active">+ Trắc nghiệm</button>
+      <button data-ttab="tf">+ Đúng/Sai</button>
+      <button data-ttab="short">+ Trả lời ngắn</button>
+      <button data-ttab="manage">Quản lý ngân hàng</button>
+      <button data-ttab="io">Xuất / Nhập JSON</button>
+    </div>
+
+    <div class="teacher-tab-panel active" data-tpanel="mcq">
+      <h3>Thêm câu hỏi trắc nghiệm</h3>
+      <div class="form-field"><label>Nội dung câu hỏi (hỗ trợ LaTeX: \(x^2\))</label><textarea id="mcq-q" placeholder="Ví dụ: Diện tích hình phẳng giới hạn bởi y=x², Ox, x=0, x=1 là"></textarea></div>
+      <div class="form-field"><label>Các lựa chọn (đánh dấu vào đáp án đúng)</label>
+        <div class="option-row"><span class="opt-label">A.</span><input type="text" id="mcq-a" placeholder="Lựa chọn A"><input type="radio" name="mcq-correct" value="0" checked></div>
+        <div class="option-row"><span class="opt-label">B.</span><input type="text" id="mcq-b" placeholder="Lựa chọn B"><input type="radio" name="mcq-correct" value="1"></div>
+        <div class="option-row"><span class="opt-label">C.</span><input type="text" id="mcq-c" placeholder="Lựa chọn C"><input type="radio" name="mcq-correct" value="2"></div>
+        <div class="option-row"><span class="opt-label">D.</span><input type="text" id="mcq-d" placeholder="Lựa chọn D"><input type="radio" name="mcq-correct" value="3"></div>
+      </div>
+      <div class="form-field"><label>Gợi ý (không bắt buộc)</label><textarea id="mcq-hint" placeholder="Một gợi ý ngắn cho học sinh"></textarea></div>
+      <button class="btn-main" id="addMcqBtn">Thêm vào ngân hàng</button>
+    </div>
+
+    <div class="teacher-tab-panel" data-tpanel="tf">
+      <h3>Thêm câu hỏi Đúng/Sai (4 ý)</h3>
+      <div class="form-field"><label>Câu dẫn (intro)</label><textarea id="tf-intro" placeholder="Ví dụ: Cho f(x)=x²-2x. Xét các mệnh đề sau:"></textarea></div>
+      <div class="form-field"><label>Các ý và đáp án đúng (Đ/S)</label>
+        <div id="tf-stmts-container"></div>
+        <button class="btn-ghost btn-sm" id="addTfStmtBtn" style="margin-top:6px">+ Thêm ý</button>
+      </div>
+      <button class="btn-main" id="addTfBtn">Thêm vào ngân hàng</button>
+    </div>
+
+    <div class="teacher-tab-panel" data-tpanel="short">
+      <h3>Thêm câu trả lời ngắn</h3>
+      <div class="form-field"><label>Câu hỏi</label><textarea id="short-q" placeholder="Ví dụ: Tính ∫₀¹ (2x+1)dx"></textarea></div>
+      <div class="form-field"><label>Đáp án đúng</label><input type="text" id="short-a" placeholder="Ví dụ: 2 hoặc 1/3 hoặc e-1 hoặc sqrt(2)-1"></div>
+      <div class="form-field"><label>Gợi ý (không bắt buộc)</label><textarea id="short-hint" placeholder="Một gợi ý ngắn"></textarea></div>
+      <button class="btn-main" id="addShortBtn">Thêm vào ngân hàng</button>
+    </div>
+
+    <div class="teacher-tab-panel" data-tpanel="manage">
+      <h3>Ngân hàng câu hỏi giáo viên</h3>
+      <p class="small" id="bankCount"></p>
+      <div class="tab-list">
+        <button class="btn-ghost btn-sm" data-bankfilter="all">Tất cả</button>
+        <button class="btn-ghost btn-sm" data-bankfilter="mcq">Trắc nghiệm</button>
+        <button class="btn-ghost btn-sm" data-bankfilter="tf">Đúng/Sai</button>
+        <button class="btn-ghost btn-sm" data-bankfilter="short">Trả lời ngắn</button>
+      </div>
+      <div id="bankList"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn-main" id="makeCustomExamBtn">Tạo đề kiểm tra từ ngân hàng</button>
+      </div>
+    </div>
+
+    <div class="teacher-tab-panel" data-tpanel="io">
+      <h3>Xuất / Nhập ngân hàng câu hỏi</h3>
+      <p class="small">Sao lưu dưới dạng JSON để chia sẻ với đồng nghiệp hoặc chuyển sang máy khác.</p>
+      <div class="row">
+        <button class="btn-main" id="exportBankBtn">Tải JSON ngân hàng</button>
+        <button class="btn-ghost" id="importBankBtn">Chọn file JSON để nhập</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none">
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn-danger btn-sm" id="clearBankBtn">Xoá toàn bộ ngân hàng</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== SETTINGS & API KEY ==================== -->
+<section id="page-settings" class="page">
+  <h1>Cài đặt &amp; API Key</h1>
+  <p class="sub">Cấu hình Gemini API key để dùng trợ lý giải thích lời giải. Key chỉ lưu trên trình duyệt của em, không gửi đi đâu ngoài Google.</p>
+
+  <!-- Hướng dẫn lấy API key -->
+  <div class="card">
+    <span class="tag ok">Hướng dẫn</span>
+    <h2>Lấy Gemini API key miễn phí (dành cho học sinh)</h2>
+    <p class="small" style="margin-bottom:16px">Gemini API có gói miễn phí, không cần thẻ tín dụng, đủ dùng cho việc học tập hàng ngày. Làm theo 5 bước sau:</p>
+
+    <div class="api-guide-step">
+      <div class="api-step-num">1</div>
+      <div class="step-body">
+        <strong>Mở Google AI Studio</strong>
+        <p>Truy cập <a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a> và đăng nhập bằng tài khoản Google (Gmail) của em.</p>
+      </div>
+    </div>
+
+    <div class="api-guide-step">
+      <div class="api-step-num">2</div>
+      <div class="step-body">
+        <strong>Đồng ý điều khoản sử dụng</strong>
+        <p>Nếu được hỏi, bấm chấp nhận Terms of Service và chính sách quyền riêng tư.</p>
+      </div>
+    </div>
+
+    <div class="api-guide-step">
+      <div class="api-step-num">3</div>
+      <div class="step-body">
+        <strong>Bấm “Get API key”</strong>
+        <p>Ở thanh điều hướng bên trái (hoặc trang chủ), tìm nút <strong>Get API key</strong>. Hoặc truy cập trực tiếp <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">aistudio.google.com/app/apikey</a>.</p>
+      </div>
+    </div>
+
+    <div class="api-guide-step">
+      <div class="api-step-num">4</div>
+      <div class="step-body">
+        <strong>Tạo key mới</strong>
+        <p>Bấm <strong>Create API key</strong>. Nếu được hỏi chọn project, em có thể chọn một project có sẵn hoặc để AI Studio tự tạo project mới. Sau đó bấm <strong>Create API key in new project</strong>.</p>
+      </div>
+    </div>
+
+    <div class="api-guide-step">
+      <div class="api-step-num">5</div>
+      <div class="step-body">
+        <strong>Sao chép và lưu key</strong>
+        <p>Một chuỗi ký tự bắt đầu bằng <span class="api-key-badge">AIza…</span> sẽ hiện ra. Bấm biểu tượng sao chép và dán vào ô bên dưới. <strong>Lưu ý:</strong> Google chỉ hiển thị đầy đủ key một lần duy nhất – hãy sao chép ngay.</p>
+      </div>
+    </div>
+
+    <div class="api-guide-callout">
+      <strong>Lưu ý quan trọng:</strong> Không chia sẻ API key cho người khác và không đăng lên mạng. Key chỉ dùng cho việc học của em. Nếu lỡ để lộ, hãy quay lại AI Studio xoá key cũ và tạo key mới.
+    </div>
+
+    <div class="api-guide-note">
+      <strong>Gói miễn phí có đủ dùng không?</strong> Có. Gói miễn phí của Gemini API cho phép gọi các model như Gemini 2.5 Flash-Lite, 2.5 Flash… với giới hạn lượt gọi mỗi phút/ngày, hoàn toàn đủ cho nhu cầu ôn tập cá nhân. Không cần nhập thẻ tín dụng, không mất phí.
+    </div>
+  </div>
+
+  <!-- Ô nhập key -->
+  <div class="card">
+    <span class="tag">Gemini API</span>
+    <h3>Dán API key của em vào đây</h3>
+    <div class="row">
+      <input type="password" id="apiKeyInput" placeholder="AIza... (dán Gemini API key)" style="flex:1;min-width:200px">
+      <button class="btn-main" id="saveKeyBtn">Lưu key</button>
+      <button class="btn-ghost btn-sm" id="clearKeyBtn">Xoá key</button>
+    </div>
+    <p class="small" id="keyStatus" style="margin-top:8px"></p>
+  </div>
+
+  <div class="card">
+    <h3>Xoá toàn bộ tiến độ học tập</h3>
+    <p class="small">Xoá điểm đã lưu, trạng thái các bài đã làm, ngân hàng câu hỏi giáo viên trong trình duyệt này.</p>
+    <button class="btn-ghost" id="clearProgressBtn">Xoá tiến độ &amp; ngân hàng</button>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer class="site-footer">
+  <div class="footer-brand">∫ Ứng dụng tích phân – Diện tích hình phẳng · Tự học Toán 12</div>
+  <div class="footer-author"><strong>Thiết kế bởi: Thầy Nguyễn Hữu Trung</strong></div>
+  <div class="footer-school">Trường THPT Trần Phú · Hotline/Zalo: <a href="tel:0964848989">0964 848 989</a></div>
+  <div class="footer-note">Website hỗ trợ học sinh ôn tập ứng dụng tích phân – Cấu trúc đề thi tốt nghiệp THPT 2025 · Toàn bộ dữ liệu lưu trữ cục bộ trên trình duyệt của bạn</div>
+</footer>
+
+</main>
+
+<div id="printContent"></div>
+
+<script>
+/* =========================================================
+   HELPERS
+========================================================= */
+function $(sel, root=document){ return root.querySelector(sel); }
+function $$(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+function renderMath(root=document.body){
+  if (window.renderMathInElement){
+    try{
+      renderMathInElement(root, {
+        delimiters: [{left:'$$', right:'$$', display:true},{left:'\\(', right:'\\)', display:false}],
+        throwOnError: false
+      });
+    }catch(e){}
+  }
+}
+/* SỬA 3: normalizeNumber & sameAnswer linh hoạt hơn */
+function normalizeNumber(raw){
+  if (raw == null) return NaN;
+  let s = String(raw).trim().replace(/\s+/g,'').replace(/,/g, '.');
+  if (s === '') return NaN;
+  if (/^-?\d+(?:\.\d+)?$/.test(s)) return parseFloat(s);
+  const m = s.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+  if (m) return parseFloat(m[1]) / parseFloat(m[2]);
+  let e = s
+    .replace(/π|pi/gi, 'Math.PI')
+    .replace(/√(\d+(?:\.\d+)?)/g, 'Math.sqrt($1)')
+    .replace(/√/g, 'Math.sqrt')
+    .replace(/sqrt/gi, 'Math.sqrt')
+    .replace(/Math\.Math\./g, 'Math.')
+    .replace(/ln\(([^)]+)\)/gi, 'Math.log($1)')
+    .replace(/ln(\d+(?:\.\d+)?)/gi, 'Math.log($1)')
+    .replace(/\^/g, '**')
+    .replace(/(?<![a-zA-Z])e(?![a-zA-Z])/g, 'Math.E')
+    .replace(/Math\.Math\./g, 'Math.');
+  try{
+    const v = Function('"use strict"; return (' + e + ');')();
+    if (typeof v === 'number' && isFinite(v)) return v;
+  }catch(_){}
+  return NaN;
+}
+function sameAnswer(userRaw, correctRaw){
+  const vC = normalizeNumber(correctRaw);
+  const vU = normalizeNumber(userRaw);
+  if (!isNaN(vC) && !isNaN(vU)){
+    return Math.abs(vU - vC) < 1e-3;
+  }
+  return String(userRaw||'').trim().toLowerCase() === String(correctRaw||'').trim().toLowerCase();
+}
+function fmt(n){
+  if (typeof n !== 'number' || !isFinite(n)) return String(n);
+  const fracs = {'0.3333333':'1/3','0.6666667':'2/3','1.5':'3/2','2.6666667':'8/3','0.1666667':'1/6','0.5':'1/2','4.5':'9/2','10.6666667':'32/3','1.3333333':'4/3','2.5':'5/2','3.5':'7/2','6.6666667':'20/3','14.6666667':'44/3','7.5':'15/2','5.3333333':'16/3','0.8333333':'5/6'};
+  const r = n.toFixed(7).replace(/0+$/,'').replace(/\.$/,'');
+  return fracs[r] || r;
+}
+function stripMath(s){
+  return String(s).replace(/\\\(|\\\)|\$\$/g,'').replace(/\\[a-zA-Z]+/g,'').replace(/[{}]/g,'').trim();
+}
+
+/* =========================================================
+   PROGRESS STATE
+========================================================= */
+const progressState = {
+  knowledge: { c1:false, c2:false, c3:false },
+  exam: { e1:null, e2:null, e3:null }
+};
+function loadProgress(){
+  try{
+    const s = JSON.parse(localStorage.getItem('learningProgress')||'null');
+    if (s){
+      Object.assign(progressState.knowledge, s.knowledge||{});
+      Object.assign(progressState.exam, s.exam||{});
+    }
+  }catch(_){}
+}
+function saveProgress(){
+  try{ localStorage.setItem('learningProgress', JSON.stringify(progressState)); }catch(_){}
+}
+function resetProgress(){
+  if (!confirm('Đặt lại toàn bộ tiến trình học tập (lý thuyết, điểm kiểm tra)? Các câu luyện tập đã làm cũng sẽ bị xoá.')) return;
+  progressState.knowledge = { c1:false, c2:false, c3:false };
+  progressState.exam = { e1:null, e2:null, e3:null };
+  practiceState.results = {};
+  practiceState.groupIndex = null;
+  practiceState.current = 0;
+  try{ localStorage.removeItem('practiceState'); localStorage.removeItem('learningProgress'); }catch(_){}
+  $$('input[data-know]').forEach(inp => {
+    inp.checked = false;
+    inp.closest('.know-check-wrap').classList.remove('checked');
+  });
+  renderProgressTree();
+  renderPracticePage();
+  alert('Đã đặt lại tiến trình.');
+}
+function getPracticeCounts(){
+  const counts = { g1:0, g2:0, g3:0 };
+  for (const key in practiceState.results){
+    if (practiceState.results[key].ok){
+      const g = parseInt(key.split('-')[0], 10);
+      if (g === 0) counts.g1++;
+      else if (g === 1) counts.g2++;
+      else if (g === 2) counts.g3++;
+    }
+  }
+  return counts;
+}
+function renderProgressTree(){
+  const el = $('#progressTree');
+  if (!el) return;
+  const kd = progressState.knowledge;
+  const kCount = [kd.c1, kd.c2, kd.c3].filter(x=>x).length;
+  const kDone = kCount === 3;
+
+  const pc = getPracticeCounts();
+  const pTotal = pc.g1 + pc.g2 + pc.g3;
+  const pDone = pc.g1 >= 10 && pc.g2 >= 10 && pc.g3 >= 10;
+
+  const ex = progressState.exam;
+  const eCount = [ex.e1, ex.e2, ex.e3].filter(x=>x!==null).length;
+  const eDone = eCount === 3;
+
+  let current = null;
+  if (!kDone) current = 'knowledge';
+  else if (!pDone) current = 'practice';
+  else if (!eDone) current = 'exam';
+
+  const cls = (name) => {
+    const done = { knowledge:kDone, practice:pDone, exam:eDone }[name];
+    return (done?' done':'') + (current===name?' current':'');
+  };
+
+  el.innerHTML = `
+    <div class="pt-stage">
+      <div class="pt-node done" onclick="gotoPage('home')">
+        <span class="pt-emoji">🚀</span>
+        <div class="pt-body"><div class="pt-title">Bắt đầu</div><div class="pt-sub">Khởi động lộ trình học tập</div></div>
+        <span class="pt-badge">✓</span>
+      </div>
+    </div>
+    <div class="pt-connector done"></div>
+    <div class="pt-stage">
+      <div class="pt-node${cls('knowledge')}" onclick="gotoPage('knowledge')">
+        <span class="pt-emoji">📚</span>
+        <div class="pt-body"><div class="pt-title">Bước 1 · Lý thuyết</div><div class="pt-sub">3 thẻ kiến thức nền</div></div>
+        <span class="pt-badge">${kCount}/3</span>
+        <span class="pt-check">✓</span>
+      </div>
+      <div class="pt-children">
+        <div class="pt-leaf${kd.c1?' done':''}" onclick="gotoPage('knowledge')"><span class="pt-leaf-dot"></span>Thẻ 1</div>
+        <div class="pt-leaf${kd.c2?' done':''}" onclick="gotoPage('knowledge')"><span class="pt-leaf-dot"></span>Thẻ 2</div>
+        <div class="pt-leaf${kd.c3?' done':''}" onclick="gotoPage('knowledge')"><span class="pt-leaf-dot"></span>Thẻ 3</div>
+      </div>
+    </div>
+    <div class="pt-connector${kDone?' done':''}"></div>
+    <div class="pt-stage">
+      <div class="pt-node${cls('practice')}" onclick="gotoPage('practice')">
+        <span class="pt-emoji">✏️</span>
+        <div class="pt-body"><div class="pt-title">Bước 2 · Luyện tập</div><div class="pt-sub">3 nhóm × 10 bài · gợi ý 3 bậc</div></div>
+        <span class="pt-badge">${pTotal}/30</span>
+        <span class="pt-check">✓</span>
+      </div>
+      <div class="pt-children">
+        <div class="pt-leaf${pc.g1>=10?' done':''}" onclick="gotoPage('practice')"><span class="pt-leaf-dot"></span>N1: ${pc.g1}/10</div>
+        <div class="pt-leaf${pc.g2>=10?' done':''}" onclick="gotoPage('practice')"><span class="pt-leaf-dot"></span>N2: ${pc.g2}/10</div>
+        <div class="pt-leaf${pc.g3>=10?' done':''}" onclick="gotoPage('practice')"><span class="pt-leaf-dot"></span>N3: ${pc.g3}/10</div>
+      </div>
+    </div>
+    <div class="pt-connector${pDone?' done':''}"></div>
+    <div class="pt-stage">
+      <div class="pt-node${cls('exam')}" onclick="gotoPage('exam')">
+        <span class="pt-emoji">📝</span>
+        <div class="pt-body"><div class="pt-title">Bước 3 · Kiểm tra</div><div class="pt-sub">3 đề × 30 câu · 90 phút</div></div>
+        <span class="pt-badge">${eCount}/3</span>
+        <span class="pt-check">✓</span>
+      </div>
+      <div class="pt-children">
+        <div class="pt-leaf${ex.e1!==null?' done':''}" onclick="gotoPage('exam')"><span class="pt-leaf-dot"></span>Đề 1${ex.e1!==null?' · '+ex.e1.toFixed(1):''}</div>
+        <div class="pt-leaf${ex.e2!==null?' done':''}" onclick="gotoPage('exam')"><span class="pt-leaf-dot"></span>Đề 2${ex.e2!==null?' · '+ex.e2.toFixed(1):''}</div>
+        <div class="pt-leaf${ex.e3!==null?' done':''}" onclick="gotoPage('exam')"><span class="pt-leaf-dot"></span>Đề 3${ex.e3!==null?' · '+ex.e3.toFixed(1):''}</div>
+      </div>
+    </div>
+    <div class="pt-connector${eDone?' done':''}"></div>
+    <div class="pt-stage">
+      <div class="pt-node${eDone?' done':''}">
+        <span class="pt-emoji">🏆</span>
+        <div class="pt-body"><div class="pt-title">Hoàn thành khóa học</div><div class="pt-sub">${eDone?'Xuất sắc! Bạn đã hoàn thành toàn bộ lộ trình.':'Hoàn thành 3 bước trên để chinh phục mục tiêu'}</div></div>
+        ${eDone?'<span class="pt-check">✓</span>':''}
+      </div>
+    </div>
+  `;
+  const banner = $('#ptCompleteBanner');
+  if (banner) banner.classList.toggle('show', eDone);
+}
+
+/* =========================================================
+   DATA: PRACTICE GROUPS
+========================================================= */
+const GROUPS = [
+  { name:'Nhóm 1 – Nền tảng', desc:'Diện tích giới hạn bởi một đường cong và trục hoành (đa thức, căn, mũ, lượng giác đơn giản).',
+    exercises: [
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=x^2\), trục \(Ox\), \(x=0\), \(x=1\).', a:1/3, hints:['\(S=\int_0^1 x^2\,dx\).','Trên \([0;1]\), \(x^2\ge 0\).','Nguyên hàm \(x^3/3\), nên \(S=\frac{1}{3}\).'], mistake:'Có thể nhầm nguyên hàm \(x^2\) thành \(2x\). Nguyên hàm đúng là \(x^3/3\).', review:'Ôn bảng nguyên hàm cơ bản (Thẻ 1).', sol:'\(S=\int_0^1 x^2\,dx=\frac{1}{3}\).' },
+      { q:'Tính \(\displaystyle\int_0^2 2x\,dx\).', a:4, hints:['Nguyên hàm \(2x\) là \(x^2\).','Thay cận: \(2^2-0^2\).','Kết quả \(=4\).'], mistake:'Quên nhân hệ số hoặc thay cận sai.', review:'Ôn định nghĩa tích phân xác định.', sol:'\([x^2]_0^2=4\).' },
+      { q:'Tính \(\displaystyle\int_1^3 (x+1)\,dx\).', a:6, hints:['Nguyên hàm \(\frac{x^2}{2}+x\).','Thay cận \(3\) và \(1\).','\((\frac{9}{2}+3)-(\frac{1}{2}+1)=6\).'], mistake:'Tính sai giá trị tại cận.', review:'Ôn Newton–Leibniz.', sol:'\([\frac{x^2}{2}+x]_1^3=6\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=x^2\), trục \(Ox\), \(x=0\), \(x=2\).', a:8/3, hints:['\(S=\int_0^2 x^2\,dx\).','\(x^2\ge 0\) trên \([0;2]\).','\(S=8/3\).'], mistake:'Tính \(2^3=6\) hoặc chia sai.', review:'Ôn lũy thừa và nguyên hàm \(x^n\).', sol:'\(S=8/3\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=x\), trục \(Ox\), \(x=0\), \(x=3\).', a:9/2, hints:['Tam giác vuông 2 cạnh góc vuông bằng 3.','\(S=\frac{1}{2}\cdot 3\cdot 3\).','Hoặc \(\int_0^3 x\,dx=9/2\).'], mistake:'Quên hệ số 1/2 của tam giác.', review:'So sánh tích phân và hình học.', sol:'\(S=9/2\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=4-x^2\) và trục \(Ox\).', a:32/3, hints:['Giao điểm: \(x=\pm 2\).','\(S=\int_{-2}^{2}(4-x^2)\,dx\).','Dùng đối xứng: \(S=2\int_0^2(4-x^2)dx=32/3\).'], mistake:'Quên cận đối xứng hoặc tính sai.', review:'Ôn parabol và diện tích (Thẻ 1, 3).', sol:'\(S=32/3\).' },
+      { q:'Tính \(\displaystyle\int_0^{\pi/2}\sin x\,dx\).', a:1, hints:['Nguyên hàm \(-\cos x\).','\(-\cos(\pi/2)+\cos 0\).','\(-0+1=1\).'], mistake:'Nhầm dấu khi nguyên hàm sin.', review:'Ôn nguyên hàm lượng giác.', sol:'\([-\cos x]_0^{\pi/2}=1\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=e^x\), trục \(Ox\), \(x=0\), \(x=1\). Nhập dạng \(e-1\).', a:'e-1', hints:['\(S=\int_0^1 e^x\,dx\).','Nguyên hàm \(e^x\).','\(S=e-1\).'], mistake:'Nhầm \(e^0=0\); thực ra \(e^0=1\).', review:'Ôn lũy thừa của \(e\).', sol:'\(S=e-1\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=\sqrt{x}\), trục \(Ox\), \(x=1\), \(x=4\).', a:14/3, hints:['\(\sqrt{x}=x^{1/2}\).','Nguyên hàm \(\frac{2}{3}x^{3/2}\).','\(S=\frac{2}{3}(8-1)=14/3\).'], mistake:'Nhầm \(4^{3/2}=6\); đúng là 8.', review:'Ôn lũy thừa phân số.', sol:'\(S=14/3\).' },
+      { q:'Tính \(\displaystyle\int_0^1 (2x+1)\,dx\).', a:2, hints:['Nguyên hàm \(x^2+x\).','Thay cận: \((1+1)-0=2\).','Kết quả \(=2\).'], mistake:'Quên cận dưới.', review:'Ôn tích phân đa thức.', sol:'\([x^2+x]_0^1=2\).' }
+    ]
+  },
+  { name:'Nhóm 2 – Vận dụng', desc:'Diện tích giữa hai đường cong: tìm giao điểm, xét dấu, dùng đối xứng.',
+    exercises: [
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=x^2\) và \(y=x\).', a:1/6, hints:['Giao điểm: \(x=0,1\).','Trên \([0;1]\), \(x\ge x^2\).','\(S=\int_0^1(x-x^2)dx=1/6\).'], mistake:'Quên tìm giao điểm hoặc nhầm thứ tự hàm.', review:'Ôn Thẻ 2.', sol:'\(S=1/6\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=x^2+2\) và \(y=3x\).', a:1/6, hints:['Giao điểm: \(x=1,2\).','\(3x\ge x^2+2\) trên \([1;2]\).','\(S=\int_1^2(3x-x^2-2)dx=1/6\).'], mistake:'Giải sai phương trình giao điểm.', review:'Ôn phương trình bậc hai và Thẻ 2.', sol:'\(S=1/6\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=x^2-2x\) và \(y=x\).', a:9/2, hints:['Giao điểm: \(x=0,3\).','\(x\ge x^2-2x\).','\(S=\int_0^3(3x-x^2)dx=9/2\).'], mistake:'Nhầm dấu khi trừ hai hàm.', review:'Ôn lập hiệu hai hàm.', sol:'\(S=9/2\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=x^2\) và \(y=2-x^2\).', a:8/3, hints:['Giao điểm: \(x=\pm 1\).','Dùng đối xứng: \(S=2\int_0^1(2-2x^2)dx\).','\(S=8/3\).'], mistake:'Quên đối xứng hoặc nhầm hiệu hai hàm.', review:'Ôn Thẻ 2 và đối xứng.', sol:'\(S=8/3\).' },
+      { q:'Tính diện tích hình phẳng giới hạn bởi \(y=x^3\) và \(y=x\).', a:1/2, hints:['Giao điểm: \(x=-1,0,1\).','Trên \([0;1]\): \(x\ge x^3\).','Dùng đối xứng: \(S=2\int_0^1(x-x^3)dx=1/2\).'], mistake:'Quên chia khoảng.', review:'Ôn xét dấu từng khoảng.', sol:'\(S=1/2\).' },
+      { q:'Tính diện tích giới hạn bởi \(y=e^x\), \(y=1\), \(x=0\), \(x=1\). Nhập dạng \(e-2\).', a:'e-2', hints:['\(e^x\ge 1\) trên \([0;1]\).','\(S=\int_0^1(e^x-1)dx\).','\(S=e-2\).'], mistake:'Quên trừ phần \(y=1\).', review:'Ôn Thẻ 2.', sol:'\(S=e-2\).' },
+      { q:'Tính diện tích giới hạn bởi \(y=\ln x\), \(Ox\), \(x=1\), \(x=e\).', a:1, hints:['\(\ln x\ge 0\) trên \([1;e]\).','\(S=\int_1^e\ln x\,dx\).','Nguyên hàm từng phần: \(x\ln x-x\), nên \(S=1\).'], mistake:'Không nhớ nguyên hàm \(\ln x\).', review:'Ôn nguyên hàm từng phần.', sol:'\(S=1\).' },
+      { q:'Tính diện tích giới hạn bởi \(y=\sqrt{x}\) và \(y=x\).', a:1/6, hints:['Giao điểm: \(x=0,1\).','\(\sqrt{x}\ge x\).','\(S=\int_0^1(\sqrt{x}-x)dx=1/6\).'], mistake:'Nhầm thứ tự hai hàm.', review:'Ôn Thẻ 2.', sol:'\(S=1/6\).' },
+      { q:'Tính diện tích giới hạn bởi \(y=x^2-1\) và \(y=1-x^2\).', a:8/3, hints:['Giao điểm: \(x=\pm 1\).','Dùng đối xứng: \(S=2\int_0^1(2-2x^2)dx\).','\(S=8/3\).'], mistake:'Nhầm hiệu hai hàm.', review:'Ôn Thẻ 2.', sol:'\(S=8/3\).' },
+      { q:'Tính diện tích giới hạn bởi \(y=\sin x\) và \(y=\cos x\), \(x=0\), \(x=\pi/4\). Nhập dạng \(\sqrt{2}-1\).', a:'sqrt(2)-1', hints:['Trên \([0;\pi/4]\), \(\cos x\ge\sin x\).','\(S=\int_0^{\pi/4}(\cos x-\sin x)dx\).','\(S=[\sin x+\cos x]_0^{\pi/4}=\sqrt{2}-1\).'], mistake:'Nhầm thứ tự sin và cos.', review:'Ôn giá trị lượng giác đặc biệt.', sol:'\(S=\sqrt{2}-1\).' }
+    ]
+  },
+  { name:'Nhóm 3 – Thực tế', desc:'Mô hình parabol: cổng hầm, mái vòm, nóc nhà kho, biển quảng cáo… Công thức \(S=\frac{2}{3}WH\).',
+    exercises: [
+      { q:'Mặt cắt cổng hầm parabol, chân rộng \(8\,\text{m}\), cao \(6\,\text{m}\). Tính diện tích (m²).', a:32, hints:['Gắn hệ trục với gốc tại trung điểm chân, đỉnh \((0;6)\), chân \((\pm 4;0)\).','Parabol \(y=ax^2+6\), thay \((4;0)\): \(a=-3/8\).','\(S=2\int_0^4(6-\frac{3}{8}x^2)dx=32\).'], mistake:'Quên nhân 2 khi đối xứng hoặc nhầm hệ số a.', review:'Ôn Thẻ 3, công thức \(S=\frac{2}{3}WH\).', sol:'\(S=32\,\text{m}^2\).' },
+      { q:'Mái vòm parabol rộng \(4\,\text{m}\), cao \(3\,\text{m}\). Tính diện tích (m²).', a:8, hints:['\(S=\frac{2}{3}\cdot 4\cdot 3\).','\(=8\).'], mistake:'Nhầm với tam giác (\(S=\frac{1}{2}WH\)).', review:'Ghi nhớ hệ số 2/3.', sol:'\(S=8\,\text{m}^2\).' },
+      { q:'Biển quảng cáo parabol rộng \(6\,\text{m}\), cao \(4\,\text{m}\). Tính diện tích (m²).', a:16, hints:['\(W=6,H=4\).','\(S=\frac{2}{3}\cdot 6\cdot 4=16\).'], mistake:'Nhầm W là nửa bề rộng.', review:'W là toàn bộ bề rộng.', sol:'\(S=16\,\text{m}^2\).' },
+      { q:'Nóc nhà kho parabol rộng \(12\,\text{m}\), cao \(3\,\text{m}\). Tính diện tích (m²).', a:24, hints:['\(S=\frac{2}{3}\cdot 12\cdot 3\).','\(=24\).'], mistake:'Nhầm chiều cao với nửa chiều cao.', review:'Ôn Thẻ 3.', sol:'\(S=24\,\text{m}^2\).' },
+      { q:'Hồ bơi mặt cắt parabol rộng \(10\,\text{m}\), sâu \(5\,\text{m}\). Nhập phân số.', a:100/3, hints:['\(S=\frac{2}{3}\cdot 10\cdot 5\).','\(=100/3\).'], mistake:'Tính \(\frac{1}{2}\cdot 10\cdot 5=25\).', review:'Hệ số 2/3 cho parabol.', sol:'\(S=100/3\).' },
+      { q:'Cầu vòm parabol rộng \(20\,\text{m}\), cao \(5\,\text{m}\). Nhập phân số.', a:200/3, hints:['\(S=\frac{2}{3}\cdot 20\cdot 5\).','\(=200/3\).'], mistake:'Nhầm công thức.', review:'Ôn Thẻ 3.', sol:'\(S=200/3\).' },
+      { q:'Cổng chào parabol rộng \(6\,\text{m}\), cao \(4\,\text{m}\). Tính diện tích (m²).', a:16, hints:['\(S=\frac{2}{3}\cdot 6\cdot 4\).','\(=16\).'], mistake:'Nhầm hệ số.', review:'Ôn Thẻ 3.', sol:'\(S=16\,\text{m}^2\).' },
+      { q:'Mái nhà parabol rộng \(8\,\text{m}\), cao \(2\,\text{m}\). Nhập phân số.', a:32/3, hints:['\(S=\frac{2}{3}\cdot 8\cdot 2\).','\(=32/3\).'], mistake:'Nhầm hệ số hoặc tính 16.', review:'Ôn Thẻ 3.', sol:'\(S=32/3\).' },
+      { q:'Đài phun nước parabol rộng \(4\,\text{m}\), cao \(2\,\text{m}\). Nhập phân số.', a:16/3, hints:['\(S=\frac{2}{3}\cdot 4\cdot 2\).','\(=16/3\).'], mistake:'Nhầm hệ số.', review:'Ôn Thẻ 3.', sol:'\(S=16/3\).' },
+      { q:'Cửa vòm parabol rộng \(4\,\text{m}\), cao \(3\,\text{m}\). Tính diện tích (m²).', a:8, hints:['\(S=\frac{2}{3}\cdot 4\cdot 3\).','\(=8\).'], mistake:'Nhầm hệ số 1/2.', review:'Ôn Thẻ 3.', sol:'\(S=8\,\text{m}^2\).' }
+    ]
+  }
+];
+
+/* =========================================================
+   DATA: EXAMS (3 × 30 câu)
+========================================================= */
+const EXAMS = [
+  { name:'Đề 1 – Cơ bản', desc:'70% nhận biết – thông hiểu, 30% vận dụng.',
+    part1: [
+      { q:'\(\displaystyle\int_0^1 x^2\,dx\) bằng', opts:['\(\frac{1}{3}\)','\(\frac{1}{2}\)','\(1\)','\(\frac{1}{4}\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^{\pi}\sin x\,dx\) bằng', opts:['\(0\)','\(1\)','\(2\)','\(\pi\)'], correct:2 },
+      { q:'Diện tích giới hạn bởi \(y=x^2\), \(Ox\), \(x=0\), \(x=1\) là', opts:['\(\frac{1}{3}\)','\(\frac{1}{2}\)','\(1\)','\(\frac{2}{3}\)'], correct:0 },
+      { q:'Diện tích giữa \(y=x\) và \(y=x^2\) trên \([0;1]\) là', opts:['\(\frac{1}{6}\)','\(\frac{1}{3}\)','\(\frac{1}{2}\)','\(\frac{2}{3}\)'], correct:0 },
+      { q:'\(\displaystyle\int_1^2\frac{1}{x}\,dx\) bằng', opts:['\(\ln 2\)','\(1\)','\(\frac{1}{2}\)','\(2\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^1 e^x\,dx\) bằng', opts:['\(e\)','\(e-1\)','\(1\)','\(e+1\)'], correct:1 },
+      { q:'Diện tích giới hạn bởi \(y=2x+1\), \(Ox\), \(x=0\), \(x=1\) là', opts:['\(1\)','\(2\)','\(3\)','\(4\)'], correct:1 },
+      { q:'\(\displaystyle\int_0^2(x-1)^2\,dx\) bằng', opts:['\(\frac{2}{3}\)','\(\frac{1}{3}\)','\(1\)','\(2\)'], correct:0 },
+      { q:'Diện tích giữa \(y=x^2+1\) và \(y=2\) trên \([-1;1]\) là', opts:['\(\frac{2}{3}\)','\(\frac{4}{3}\)','\(1\)','\(2\)'], correct:1 },
+      { q:'Diện tích giới hạn bởi \(y=\sqrt{x}\), \(Ox\), \(x=1\), \(x=4\) là', opts:['\(\frac{14}{3}\)','\(\frac{16}{3}\)','\(4\)','\(\frac{7}{3}\)'], correct:0 },
+      { q:'Diện tích giới hạn bởi \(y=\sin x\), \(Ox\), \(x=0\), \(x=\pi\) là', opts:['\(0\)','\(1\)','\(2\)','\(\pi\)'], correct:2 },
+      { q:'Diện tích giới hạn bởi \(y=x^3\), \(Ox\), \(x=-1\), \(x=1\) là', opts:['\(0\)','\(\frac{1}{2}\)','\(1\)','\(\frac{1}{4}\)'], correct:1 },
+      { q:'\(\displaystyle\int_0^1 (3x^2-1)\,dx\) bằng', opts:['\(0\)','\(1\)','\(2\)','\(-1\)'], correct:0 },
+      { q:'Diện tích giới hạn bởi \(y=x+1\), \(Ox\), \(x=0\), \(x=2\) là', opts:['\(3\)','\(4\)','\(5\)','\(6\)'], correct:1 },
+      { q:'Diện tích giới hạn bởi \(y=1-x^2\) và \(Ox\) là', opts:['\(\frac{2}{3}\)','\(\frac{4}{3}\)','\(1\)','\(2\)'], correct:1 },
+      { q:'\(\displaystyle\int_1^2 \frac{1}{x^2}\,dx\) bằng', opts:['\(\frac{1}{2}\)','\(1\)','\(\frac{1}{4}\)','\(2\)'], correct:0 }
+    ],
+    part2: [
+      { intro:'Cho \(f(x)=x^2\), \(F(x)=\frac{x^3}{3}\). Xét:',
+        stmts:[{s:'\(F\'(x)=f(x)\)',correct:true},{s:'\(\int_0^1 x^2\,dx=F(1)-F(0)\)',correct:true},{s:'\(\int_0^1 x^2\,dx=\frac{1}{3}\)',correct:true},{s:'\(\int_0^1 x^2\,dx>1\)',correct:false}] },
+      { intro:'Cho \(f(x)=x^2-4x+3\). Xét:',
+        stmts:[{s:'Cắt \(Ox\) tại \(x=1\) và \(x=3\)',correct:true},{s:'\(f(x)<0\) trên \((1;3)\)',correct:true},{s:'Diện tích giới hạn bởi f và \(Ox\) bằng \(\frac{4}{3}\)',correct:true},{s:'Diện tích đó bằng \(\int_1^3 f(x)dx\)',correct:false}] },
+      { intro:'Cho parabol \(y=-x^2+4\). Xét:',
+        stmts:[{s:'Đỉnh cao nhất 4',correct:true},{s:'Cắt \(Ox\) tại \(x=\pm 2\)',correct:true},{s:'Diện tích giới hạn với \(Ox\) bằng \(\frac{32}{3}\)',correct:true},{s:'Diện tích đó bằng 10',correct:false}] },
+      { intro:'Cho \(I=\displaystyle\int_0^{\pi}\sin x\,dx\). Xét:',
+        stmts:[{s:'\(I=2\)',correct:true},{s:'\(\int_0^{\pi/2}\sin x\,dx=1\)',correct:true},{s:'\(\int_{\pi/2}^{\pi}\sin x\,dx=1\)',correct:true},{s:'\(I=0\)',correct:false}] },
+      { intro:'Cho \(I=\displaystyle\int_0^{\pi}\sin x\,dx\). Xét:',
+        stmts:[{s:'\(I=2\)',correct:true},{s:'\(I=0\)',correct:false},{s:'\(\int_0^{\pi/2}\sin x\,dx=1\)',correct:true},{s:'Diện tích giới hạn bởi \(y=\sin x\) và \(Ox\) trên \([0,\pi]\) bằng 2',correct:true}] },
+      { intro:'Cho \(y=x^2-2x\). Xét:',
+        stmts:[{s:'Đỉnh parabol \((1;-1)\)',correct:true},{s:'\(f(x)=0\Leftrightarrow x=0\) hoặc \(x=2\)',correct:true},{s:'\(f(x)<0\) trên \((0;2)\)',correct:true},{s:'Diện tích giới hạn bởi f và \(Ox\) trên \([0;2]\) bằng \(\int_0^2 f(x)dx\)',correct:false}] }
+    ],
+    part3: [
+      { q:'Diện tích giới hạn bởi \(y=x^2\), \(Ox\), \(x=1\), \(x=2\). Nhập phân số.', a:7/3 },
+      { q:'\(\displaystyle\int_0^{\pi/2}\cos x\,dx\).', a:1 },
+      { q:'Diện tích giữa \(y=2x\) và \(y=x^2\).', a:4/3 },
+      { q:'Diện tích giữa \(y=e^x\), \(y=1\), \(x=0\), \(x=1\). Nhập dạng \(e-2\).', a:'e-2' },
+      { q:'Diện tích giới hạn bởi \(y=\ln x\), \(Ox\), \(x=1\), \(x=e\).', a:1 },
+      { q:'Diện tích giới hạn bởi \(y=x^3\), \(Ox\), \(x=-1\), \(x=1\).', a:1/2 },
+      { q:'\(\displaystyle\int_1^3 (2x+1)\,dx\).', a:10 },
+      { q:'Diện tích giới hạn bởi \(y=x^3\), \(Ox\), \(x=0\), \(x=1\). Nhập phân số.', a:1/4 }
+    ]
+  },
+  { name:'Đề 2 – Trung bình', desc:'40% thông hiểu, 50% vận dụng, 10% vận dụng cao.',
+    part1: [
+      { q:'\(\displaystyle\int_1^2 (2x+1)\,dx\) bằng', opts:['\(2\)','\(3\)','\(4\)','\(5\)'], correct:2 },
+      { q:'Diện tích giữa \(y=x^2\) và \(y=2-x^2\) là', opts:['\(\frac{8}{3}\)','\(\frac{4}{3}\)','\(\frac{2}{3}\)','\(2\)'], correct:0 },
+      { q:'Diện tích giới hạn bởi \(y=e^x\), \(y=1\), \(x=0\), \(x=1\) là', opts:['\(e-1\)','\(e-2\)','\(e\)','\(1\)'], correct:1 },
+      { q:'\(\displaystyle\int_0^1 x e^{x}\,dx\) bằng', opts:['\(1\)','\(e-1\)','\(e\)','\(\frac{1}{2}\)'], correct:0 },
+      { q:'Diện tích giữa \(y=\ln x\) và \(Ox\) trên \([1;e]\) là', opts:['\(1\)','\(e\)','\(\frac{1}{2}\)','\(2\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^{\pi}x\sin x\,dx\) bằng', opts:['\(\pi\)','\(2\pi\)','\(\pi/2\)','\(0\)'], correct:0 },
+      { q:'Diện tích giữa \(y=x^3\) và \(y=x\) trên \([-1;1]\) là', opts:['\(\frac{1}{2}\)','\(1\)','\(\frac{1}{4}\)','\(2\)'], correct:0 },
+      { q:'Diện tích giữa \(y=\sqrt{x}\) và \(y=x\) là', opts:['\(\frac{1}{6}\)','\(\frac{1}{3}\)','\(\frac{1}{2}\)','\(\frac{2}{3}\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^{\pi/2}\cos^2 x\,dx\) bằng', opts:['\(\frac{\pi}{4}\)','\(\frac{\pi}{2}\)','\(\frac{1}{2}\)','\(1\)'], correct:0 },
+      { q:'Diện tích giữa \(y=x^2-1\) và \(y=1-x^2\) là', opts:['\(\frac{8}{3}\)','\(\frac{4}{3}\)','\(\frac{2}{3}\)','\(2\)'], correct:0 },
+      { q:'\(\displaystyle\int_1^e\ln x\,dx\) bằng', opts:['\(1\)','\(e-1\)','\(e\)','\(\frac{e}{2}\)'], correct:0 },
+      { q:'Diện tích giữa \(y=\sin x\) và \(y=\cos x\) trên \([0;\pi/4]\) là', opts:['\(\sqrt{2}-1\)','\(1\)','\(\frac{\pi}{4}\)','\(\sqrt{2}\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^1 x(x+1)\,dx\) bằng', opts:['\(\frac{5}{6}\)','\(\frac{1}{3}\)','\(\frac{1}{2}\)','\(\frac{2}{3}\)'], correct:0 },
+      { q:'Diện tích giới hạn bởi \(y=x^2-4\) và \(Ox\) là', opts:['\(\frac{32}{3}\)','\(\frac{16}{3}\)','\(\frac{8}{3}\)','\(4\)'], correct:0 },
+      { q:'\(\displaystyle\int_1^e\frac{1}{x}\,dx\) bằng', opts:['\(1\)','\(e\)','\(\frac{1}{2}\)','\(2\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^1 (2x+1)^2\,dx\) bằng', opts:['\(\frac{13}{3}\)','\(\frac{4}{3}\)','\(3\)','\(5\)'], correct:0 }
+    ],
+    part2: [
+      { intro:'Cho \(I=\displaystyle\int_1^e\ln x\,dx\). Xét:',
+        stmts:[{s:'\(I=1\)',correct:true},{s:'Nguyên hàm \(\ln x\) là \(x\ln x-x\)',correct:true},{s:'\(I=[x\ln x-x]_1^e\)',correct:true},{s:'\(I=e-1\)',correct:false}] },
+      { intro:'Cho \(f(x)=x^3-3x\). Xét:',
+        stmts:[{s:'\(f(x)=0\Leftrightarrow x=0,\pm\sqrt{3}\)',correct:true},{s:'\(f\'(x)=3x^2-3\)',correct:true},{s:'Trên \([0;1]\), \(f(x)\le 0\)',correct:true},{s:'Diện tích giới hạn bởi f và \(Ox\) trên \([0;1]\) bằng \(\int_0^1 f(x)dx\)',correct:false}] },
+      { intro:'Cho parabol \(y=4-x^2\). Xét:',
+        stmts:[{s:'Đỉnh parabol \((0;4)\)',correct:true},{s:'Cắt \(Ox\) tại \(x=\pm 2\)',correct:true},{s:'Diện tích giới hạn bởi parabol và \(Ox\) bằng \(\frac{32}{3}\)',correct:true},{s:'Diện tích đó nhỏ hơn 10',correct:false}] },
+      { intro:'Cho \(f(x)=\sin x\) trên \([0;2\pi]\). Xét:',
+        stmts:[{s:'\(\int_0^{\pi}\sin x\,dx=2\)',correct:true},{s:'\(\int_{\pi}^{2\pi}\sin x\,dx=-2\)',correct:true},{s:'\(\int_0^{2\pi}\sin x\,dx=0\)',correct:true},{s:'Diện tích giới hạn bởi \(y=\sin x\) và \(Ox\) trên \([0;2\pi]\) bằng 0',correct:false}] },
+      { intro:'Cho \(f(x)=x^2-4\). Xét:',
+        stmts:[{s:'\(f(x)=0\Leftrightarrow x=\pm 2\)',correct:true},{s:'\(f(x)<0\) trên \((-2;2)\)',correct:true},{s:'Diện tích giới hạn bởi f và \(Ox\) bằng \(\int_{-2}^{2}|f(x)|dx\)',correct:true},{s:'Diện tích đó bằng \(\int_{-2}^{2}f(x)dx\)',correct:false}] },
+      { intro:'Về diện tích giữa hai đường cong \(y=f(x)\), \(y=g(x)\). Xét:',
+        stmts:[{s:'Nếu \(f(x)\ge g(x)\) trên \([a;b]\) thì \(S=\int_a^b(f-g)dx\)',correct:true},{s:'Nếu f và g cắt nhau tại \(a,b\) thì \(S=\int_a^b|f-g|dx\)',correct:true},{s:'Diện tích giữa \(y=x^2\) và \(y=x\) trên \([0;1]\) bằng \(\frac{1}{6}\)',correct:true},{s:'Diện tích giữa \(y=x^2\) và \(y=x\) bằng 0',correct:false}] }
+    ],
+    part3: [
+      { q:'Diện tích giữa \(y=x^2\) và \(y=x+2\). Nhập phân số.', a:9/2 },
+      { q:'\(\displaystyle\int_1^2\frac{1}{x^2}\,dx\). Nhập phân số.', a:1/2 },
+      { q:'Diện tích giữa \(y=x^3\) và \(y=x^2\) trên \([0;1]\). Nhập phân số.', a:1/12 },
+      { q:'\(\displaystyle\int_0^{\pi/2}\sin 2x\,dx\).', a:1 },
+      { q:'Diện tích giữa \(y=e^x\), \(y=e\), \(x=0\).', a:1 },
+      { q:'\(\displaystyle\int_0^1 \frac{1}{1+x}\,dx\). Nhập dạng \(\ln 2\).', a:'ln2' },
+      { q:'\(\displaystyle\int_1^e\ln x\,dx\).', a:1 },
+      { q:'Diện tích giới hạn bởi \(y=x^2-4\) và \(Ox\). Nhập phân số.', a:32/3 }
+    ]
+  },
+  { name:'Đề 3 – Nâng cao', desc:'20% thông hiểu, 50% vận dụng, 30% vận dụng cao.',
+    part1: [
+      { q:'Diện tích giữa \(y=x^2\) và \(y=x+2\) là', opts:['\(\frac{9}{2}\)','\(\frac{7}{2}\)','\(\frac{4}{3}\)','\(\frac{8}{3}\)'], correct:0 },
+      { q:'\(\displaystyle\int_1^e \frac{\ln x}{x}\,dx\) bằng', opts:['\(\frac{1}{2}\)','\(1\)','\(e\)','\(\frac{e}{2}\)'], correct:0 },
+      { q:'Diện tích giới hạn bởi \(y=x^2-4\) và \(Ox\) là', opts:['\(\frac{32}{3}\)','\(\frac{16}{3}\)','\(\frac{8}{3}\)','\(4\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^{\pi}x\cos x\,dx\) bằng', opts:['\(-2\)','\(2\)','\(\pi\)','\(0\)'], correct:0 },
+      { q:'Diện tích giữa \(y=x^3\) và \(y=x\) trên \([-1;1]\) là', opts:['\(\frac{1}{2}\)','\(1\)','\(\frac{1}{4}\)','\(2\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^1 xe^{x^2}\,dx\) bằng', opts:['\(\frac{e-1}{2}\)','\(e-1\)','\(\frac{e}{2}\)','\(1\)'], correct:0 },
+      { q:'Diện tích giữa \(y=e^x\) và \(y=e^{-x}\) trên \([0;1]\) là', opts:['\(e+\frac{1}{e}-2\)','\(e-\frac{1}{e}\)','\(\frac{e-1}{e}\)','\(1\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^1 x\ln(1+x)\,dx\) bằng', opts:['\(\frac{1}{4}\)','\(\frac{1}{2}\)','\(\frac{1}{3}\)','\(\ln 2\)'], correct:0 },
+      { q:'Diện tích giữa \(y=\sqrt{x}\) và \(y=x^2\) trên \([0;1]\) là', opts:['\(\frac{1}{3}\)','\(\frac{1}{2}\)','\(\frac{1}{6}\)','\(\frac{2}{3}\)'], correct:0 },
+      { q:'\(\displaystyle\int_0^{\pi/4}\tan^2 x\,dx\) bằng', opts:['\(1-\frac{\pi}{4}\)','\(\frac{\pi}{4}\)','\(\frac{\pi}{4}-1\)','\(1\)'], correct:0 },
+      { q:'Diện tích giới hạn bởi \(y=|x|\), \(y=x^2-2\).', opts:['\(\frac{20}{3}\)','\(\frac{16}{3}\)','\(\frac{8}{3}\)','\(4\)'], correct:0 },
+      /* SỬA 1: câu 12 – đáp án đúng là e (phương án B) */
+      { q:'\(\displaystyle\int_1^2 (x-1)e^x\,dx\) bằng', opts:['\(e(e-1)\)','\(e\)','\(1\)','\(e^2\)'], correct:1 },
+      { q:'\(\displaystyle\int_0^1 xe^x\,dx\) bằng', opts:['\(1\)','\(e-1\)','\(e\)','\(\frac{1}{2}\)'], correct:0 },
+      { q:'Diện tích giới hạn bởi \(y=x^2\) và \(y=2-x^2\) là', opts:['\(\frac{8}{3}\)','\(\frac{4}{3}\)','\(\frac{2}{3}\)','\(2\)'], correct:0 },
+      { q:'\(\displaystyle\int_1^e\frac{\ln x}{x}\,dx\) bằng', opts:['\(\frac{1}{2}\)','\(1\)','\(e\)','\(2\)'], correct:0 },
+      { q:'Diện tích giới hạn bởi \(y=x^3\) và \(y=x\) trên \([-1;1]\) là', opts:['\(\frac{1}{2}\)','\(1\)','\(\frac{1}{4}\)','\(2\)'], correct:0 }
+    ],
+    part2: [
+      { intro:'Cho \(y=f(x)=x^2-2x\). Xét:',
+        stmts:[{s:'Đỉnh parabol \((1;-1)\)',correct:true},{s:'\(f(x)=0\Leftrightarrow x=0,2\)',correct:true},{s:'Diện tích giới hạn bởi f và \(Ox\) trên \([0;2]\) bằng \(\frac{4}{3}\)',correct:true},{s:'Diện tích đó bằng \(\int_0^2 f(x)dx\)',correct:false}] },
+      { intro:'Cho \(I=\displaystyle\int_0^1 xe^x\,dx\). Xét:',
+        stmts:[{s:'\(I=1\)',correct:true},{s:'Dùng tích phân từng phần với \(u=x\), \(dv=e^x dx\)',correct:true},{s:'\(I=[xe^x-e^x]_0^1\)',correct:true},{s:'\(I=e-1\)',correct:false}] },
+      { intro:'Cho \(y=x^3-3x\). Xét:',
+        stmts:[{s:'Cực đại tại \(x=-1\), cực tiểu tại \(x=1\)',correct:true},{s:'Giao \(Ox\) tại \(x=0,\pm\sqrt{3}\)',correct:true},{s:'Diện tích giới hạn bởi \(y=x^3-3x\) và \(Ox\) trên \([0;\sqrt{3}]\) bằng \(\frac{9}{4}\)',correct:true},{s:'Diện tích đó bằng 0',correct:false}] },
+      { intro:'Cho \(\displaystyle I=\int_0^1 \frac{1}{1+x^2}\,dx\). Xét:',
+        stmts:[{s:'\(I=\frac{\pi}{4}\)',correct:true},{s:'\(\frac{1}{1+x^2}\) có nguyên hàm là \(\arctan x\)',correct:true},{s:'I là diện tích giới hạn bởi \(y=\frac{1}{1+x^2}\), \(Ox\), \(x=0\), \(x=1\)',correct:true},{s:'\(I=1\)',correct:false}] },
+      { intro:'Cho \(I=\displaystyle\int_0^1 xe^x\,dx\). Xét:',
+        stmts:[{s:'\(I=1\)',correct:true},{s:'Dùng tích phân từng phần',correct:true},{s:'\(I=[xe^x-e^x]_0^1\)',correct:true},{s:'\(I=e\)',correct:false}] },
+      { intro:'Cho \(y=x^3-3x\). Xét:',
+        stmts:[{s:'Cực đại tại \(x=-1\)',correct:true},{s:'Cực tiểu tại \(x=1\)',correct:true},{s:'Giao \(Ox\) tại \(x=0,\pm\sqrt{3}\)',correct:true},{s:'Diện tích giới hạn bởi \(y=x^3-3x\) và \(Ox\) trên \([0;\sqrt{3}]\) bằng \(\frac{9}{4}\)',correct:true}] }
+    ],
+    part3: [
+      { q:'Diện tích giữa \(y=x^2\) và \(y=x^3\) trên \([0;1]\). Nhập phân số.', a:1/12 },
+      { q:'\(\displaystyle\int_0^{\pi/2}\sin^2 x\,dx\). Nhập dạng \(\pi/4\).', a:'pi/4' },
+      { q:'Diện tích giữa \(y=x^2\) và \(y=2-x^2\). Nhập phân số.', a:8/3 },
+      { q:'\(\displaystyle\int_1^2 \frac{1}{x^2}\,dx\). Nhập phân số.', a:1/2 },
+      { q:'Diện tích giữa \(y=e^x\) và \(y=1\), \(x=0\), \(x=1\). Nhập dạng \(e-2\).', a:'e-2' },
+      { q:'\(\displaystyle\int_0^{\pi/4}\tan^2 x\,dx\). Nhập dạng \(1-\pi/4\).', a:'1-pi/4' },
+      { q:'\(\displaystyle\int_0^1 x^2e^{x^3}\,dx\). Nhập dạng \((e-1)/3\).', a:'(e-1)/3' },
+      { q:'Diện tích giới hạn bởi \(y=x^2\) và \(y=x+2\). Nhập phân số.', a:9/2 }
+    ]
+  }
+];
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+function gotoPage(name){
+  $$('.page').forEach(p => p.classList.toggle('active', p.id === 'page-' + name));
+  $$('.nav-links button').forEach(b => b.classList.toggle('active', b.dataset.page === name));
+  window.scrollTo({top:0, behavior:'smooth'});
+  renderMath();
+  if (name === 'home') renderProgressTree();
+  if (name === 'practice') renderPracticePage();
+  if (name === 'exam') renderExamPage();
+  if (name === 'settings') updateKeyStatus();
+  if (name === 'teacher') renderTeacherPage();
+  if (name === 'exam' && examState.active) $('#timer').classList.add('show');
+  else $('#timer').classList.remove('show');
+}
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-page]');
+  if (t){ e.preventDefault(); gotoPage(t.dataset.page); }
+});
+
+/* =========================================================
+   PRACTICE
+========================================================= */
+const practiceState = { groupIndex:null, current:0, hintLevel:0, results:{} };
+function renderPracticePage(){
+  const root = $('#practiceContent');
+  if (practiceState.groupIndex === null){
+    root.innerHTML = `<div class="grid g3">${GROUPS.map((g,i)=>`
+      <div class="card">
+        <span class="tag">${i===0?'Nền tảng':i===1?'Vận dụng':'Thực tế'}</span>
+        <h3>${g.name}</h3>
+        <p class="muted">${g.desc}</p>
+        <button class="btn-main btn-sm" onclick="startGroup(${i})">Vào nhóm ${i+1}</button>
+      </div>`).join('')}</div>`;
+    renderMath(root);
+    return;
+  }
+  const g = GROUPS[practiceState.groupIndex];
+  const idx = practiceState.current;
+  const ex = g.exercises[idx];
+  const key = practiceState.groupIndex + '-' + idx;
+  const res = practiceState.results[key];
+  root.innerHTML = `
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center;margin-top:0">
+        <span class="tag">${g.name}</span>
+        <span class="small">Bài ${idx+1} / ${g.exercises.length}</span>
+      </div>
+      <div class="progress-bar"><div style="width:${((idx+1)/g.exercises.length)*100}%"></div></div>
+      <div class="q-text" style="font-size:1.05rem;margin-bottom:14px">${ex.q}</div>
+      ${ex.hints.map((h,i)=>`<div class="hint-box" id="hint-${i}" ${res&&res.hintLevel>=i+1?'style="display:block"':''}><strong>Gợi ý ${i+1}:</strong> ${h}</div>`).join('')}
+      <div class="row">
+        <button class="btn-warn" id="hintBtn" ${res?'disabled':''}>Yêu cầu gợi ý (0/3)</button>
+        <input type="text" id="answerInput" placeholder="Nhập đáp án (số, phân số, e-1…)" ${res?'disabled':''}>
+        <button class="btn-dark" id="checkBtn" ${res?'disabled':''}>Kiểm tra</button>
+      </div>
+      <div class="feedback ${res?'show '+(res.ok?'ok':'bad'):''}" id="feedback">${res?(res.ok?`<strong>Chính xác!</strong> ${ex.sol}`:`<strong>Chưa đúng.</strong> ${ex.mistake}<br><em>Định hướng ôn tập:</em> ${ex.review}<br><br><em>Lời giải:</em> ${ex.sol}`):''}</div>
+      ${res && !res.ok ? `<div class="row"><button class="btn-ghost" id="askGemini">Hỏi Gemini vì sao sai</button><button class="btn-ghost btn-sm" id="retryBtn">Làm lại bài này</button></div><div class="ai-out" id="aiOut"></div>` : ''}
+      <div class="row" style="justify-content:space-between;margin-top:18px">
+        <button class="btn-ghost btn-sm" onclick="navPractice(-1)" ${idx===0?'disabled':''}>← Bài trước</button>
+        <button class="btn-ghost btn-sm" onclick="backToGroups()">Về danh sách</button>
+        <button class="btn-ghost btn-sm" onclick="navPractice(1)" ${idx===g.exercises.length-1?'disabled':''}>Bài tiếp →</button>
+      </div>
+    </div>`;
+  let hl = res ? res.hintLevel : 0;
+  practiceState.hintLevel = hl;
+  const hintBtn = $('#hintBtn');
+  if (hintBtn && hl < 3){
+    hintBtn.textContent = `Yêu cầu gợi ý (${hl}/3)`;
+    hintBtn.addEventListener('click', () => {
+      if (practiceState.hintLevel >= 3) return;
+      const need = practiceState.hintLevel;
+      if (!confirm(`Em có chắc muốn xem gợi ý ${need+1}/3? Hãy thử tự làm trước.`)) return;
+      practiceState.hintLevel++;
+      $(`#hint-${practiceState.hintLevel-1}`).style.display = 'block';
+      if (practiceState.hintLevel >= 3){ hintBtn.textContent = 'Đã mở hết gợi ý'; hintBtn.disabled = true; }
+      else hintBtn.textContent = `Yêu cầu gợi ý (${practiceState.hintLevel}/3)`;
+      renderMath(root);
+    });
+  }
+  const checkBtn = $('#checkBtn');
+  if (checkBtn){
+    checkBtn.addEventListener('click', () => {
+      const raw = $('#answerInput').value.trim();
+      const ok = sameAnswer(raw, ex.a);
+      practiceState.results[key] = { ok, user:raw, correct: ex.a, hintLevel: practiceState.hintLevel };
+      try{ localStorage.setItem('practiceState', JSON.stringify({results: practiceState.results})); }catch(_){}
+      renderProgressTree();
+      const fb = $('#feedback');
+      fb.className = 'feedback show ' + (ok?'ok':'bad');
+      fb.innerHTML = ok ? `<strong>Chính xác!</strong> ${ex.sol}`
+        : `<strong>Chưa đúng.</strong> ${ex.mistake}<br><em>Định hướng ôn tập:</em> ${ex.review}<br><br><em>Lời giải:</em> ${ex.sol}`;
+      checkBtn.disabled = true;
+      $('#answerInput').disabled = true;
+      if (hintBtn) hintBtn.disabled = true;
+      if (!ok){
+        const row = document.createElement('div');
+        row.className = 'row';
+        row.innerHTML = `<button class="btn-ghost" id="askGemini">Hỏi Gemini vì sao sai</button><button class="btn-ghost btn-sm" id="retryBtn">Làm lại bài này</button>`;
+        fb.insertAdjacentElement('afterend', row);
+        const aiOut = document.createElement('div');
+        aiOut.className = 'ai-out';
+        aiOut.id = 'aiOut';
+        row.insertAdjacentElement('afterend', aiOut);
+        $('#askGemini').addEventListener('click', () => askGeminiPractice(ex, raw));
+        $('#retryBtn').addEventListener('click', () => {
+          delete practiceState.results[key];
+          try{ localStorage.setItem('practiceState', JSON.stringify({results: practiceState.results})); }catch(_){}
+          renderProgressTree();
+          renderPracticePage();
+        });
+      } else {
+        const row = document.createElement('div');
+        row.className = 'row';
+        if (idx < g.exercises.length - 1){
+          row.innerHTML = `<button class="btn-main btn-sm" onclick="navPractice(1)">Bài tiếp →</button>`;
+        } else {
+          row.innerHTML = `<button class="btn-main btn-sm" onclick="backToGroups()">Hoàn thành nhóm này</button>`;
+        }
+        fb.insertAdjacentElement('afterend', row);
+      }
+      renderMath(root);
+    });
+  }
+  if (res && !res.ok){
+    const ag = $('#askGemini');
+    if (ag) ag.addEventListener('click', () => askGeminiPractice(ex, res.user));
+    const rt = $('#retryBtn');
+    if (rt) rt.addEventListener('click', () => {
+      delete practiceState.results[key];
+      try{ localStorage.setItem('practiceState', JSON.stringify({results: practiceState.results})); }catch(_){}
+      renderProgressTree();
+      renderPracticePage();
+    });
+  }
+  renderMath(root);
+}
+function startGroup(i){ practiceState.groupIndex = i; practiceState.current = 0; practiceState.hintLevel = 0; renderPracticePage(); window.scrollTo({top:0,behavior:'smooth'}); }
+function navPractice(d){ const g = GROUPS[practiceState.groupIndex]; const n = practiceState.current + d; if (n<0||n>=g.exercises.length) return; practiceState.current = n; practiceState.hintLevel = 0; renderPracticePage(); }
+function backToGroups(){ practiceState.groupIndex = null; renderPracticePage(); }
+async function askGeminiPractice(ex, userAnswer){
+  const out = $('#aiOut'); if (!out) return;
+  const key = getGeminiKey();
+  if (!key){
+    out.classList.add('show');
+    out.innerHTML = `Chưa có Gemini API key. Vào <a href="#" onclick="gotoPage('settings'); return false;"><strong>Cài đặt &amp; API Key</strong></a> để xem hướng dẫn lấy key miễn phí.`;
+    return;
+  }
+  out.classList.add('show'); out.textContent = 'Đang hỏi Gemini…';
+  const prompt = `Bạn là giáo viên Toán THPT. Học sinh làm bài về ứng dụng tích phân tính diện tích hình phẳng.
+Đề bài: ${stripMath(ex.q)}
+Học sinh nhập: ${userAnswer}
+Đáp án đúng: ${stripMath(String(ex.sol))}
+Chỉ ra lỗi sai cụ thể của học sinh trong 3–4 câu, rồi hướng dẫn sửa bằng một bước tính ngắn gọn. Không đưa lời giải đầy đủ.`;
+  try{ out.textContent = await callGemini(prompt); }
+  catch(e){ out.textContent = 'Không gọi được Gemini. ' + e.message; }
+}
+
+/* =========================================================
+   EXAM
+========================================================= */
+const examState = { active:false, examIndex:null, answers:{}, startTime:null, timeLimit:90*60, timerId:null, results:null };
+function renderExamPage(){
+  const root = $('#examContent');
+  if (examState.active){ renderActiveExam(root); return; }
+  const teacherExams = getTeacherExams();
+  root.innerHTML = `
+    <div class="grid g3">
+      ${EXAMS.map((e,i)=>`
+        <div class="card">
+          <span class="tag">Đề ${i+1}</span>
+          <h3>${e.name}</h3>
+          <p class="muted">${e.desc}</p>
+          <p class="small">${e.part1.length} TN + ${e.part2.length} Đ/S + ${e.part3.length} TL ngắn · 90 phút</p>
+          <div class="row">
+            <button class="btn-main btn-sm" onclick="startExam(${i})">Bắt đầu</button>
+            <button class="btn-ghost btn-sm" onclick="exportExamPDF(${i})">Xuất PDF</button>
+          </div>
+        </div>`).join('')}
+    </div>
+    ${teacherExams.length > 0 ? `
+    <div class="card">
+      <span class="tag warn">Đề giáo viên</span>
+      <h3>Đề tự tạo từ ngân hàng (${teacherExams.length} câu)</h3>
+      <p class="muted">Đề được ghép từ câu hỏi giáo viên đã soạn: ${countTeacherByType().mcq} TN, ${countTeacherByType().tf} Đ/S, ${countTeacherByType().short} TL ngắn.</p>
+      <div class="row">
+        <button class="btn-main btn-sm" onclick="startTeacherExam()">Làm đề này</button>
+        <button class="btn-ghost btn-sm" onclick="exportTeacherExamPDF()">Xuất PDF</button>
+      </div>
+    </div>`:''}
+    <div class="card">
+      <h3>Lưu ý khi thi</h3>
+      <ul class="small">
+        <li>Đồng hồ 90:00 đếm ngược ở góc phải; hết giờ tự nộp.</li>
+        <li>Phần II (Đúng/Sai): mỗi câu 4 ý, chọn Đ hoặc S cho từng ý.</li>
+        <li>Phần III (Trả lời ngắn): nhập số, phân số (<code>1/3</code>), hoặc biểu thức (<code>e-1</code>, <code>sqrt(2)-1</code>).</li>
+        <li>Bấm <em>Xuất PDF</em> để in đề cho học sinh làm trên giấy.</li>
+      </ul>
+    </div>`;
+  renderMath(root);
+}
+function startExam(i){
+  examState.active = true; examState.examIndex = i; examState.answers = {};
+  examState.startTime = Date.now(); examState.timeLimit = 90*60;
+  startTimer(); renderExamPage(); window.scrollTo({top:0,behavior:'smooth'});
+}
+function startTeacherExam(){
+  const t = getTeacherExams();
+  if (t.length === 0){ alert('Ngân hàng giáo viên chưa có câu hỏi.'); return; }
+  const virtual = {
+    name:'Đề giáo viên',
+    part1: t.filter(x=>x.type==='mcq').map(x=>({q:x.q, opts:x.opts, correct:x.correct})),
+    part2: t.filter(x=>x.type==='tf').map(x=>({intro:x.intro, stmts:x.stmts})),
+    part3: t.filter(x=>x.type==='short').map(x=>({q:x.q, a:x.a}))
+  };
+  EXAMS.push(virtual);
+  const idx = EXAMS.length - 1;
+  startExam(idx);
+}
+function startTimer(){
+  stopTimer();
+  const t = $('#timer');
+  t.classList.add('show'); t.classList.remove('warn');
+  const tick = () => {
+    const elapsed = Math.floor((Date.now() - examState.startTime)/1000);
+    const remain = examState.timeLimit - elapsed;
+    if (remain <= 0){ stopTimer(); submitExam(true); return; }
+    const m = Math.floor(remain/60), s = remain%60;
+    t.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if (remain < 10*60) t.classList.add('warn');
+  };
+  tick(); examState.timerId = setInterval(tick, 1000);
+}
+function stopTimer(){ if (examState.timerId){ clearInterval(examState.timerId); examState.timerId = null; } $('#timer').classList.remove('show'); }
+function renderActiveExam(root){
+  const exam = EXAMS[examState.examIndex];
+  root.innerHTML = `
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-top:0">
+        <h2 style="margin:0">${exam.name}</h2>
+        <button class="btn-dark btn-sm" onclick="submitExam()">Nộp bài</button>
+      </div>
+    </div>
+    <div class="card exam-part"><div class="exam-part-title">PHẦN I – Trắc nghiệm (${exam.part1.length} câu)</div><div id="part1"></div></div>
+    <div class="card exam-part"><div class="exam-part-title">PHẦN II – Đúng / Sai (${exam.part2.length} câu)</div><div id="part2"></div></div>
+    <div class="card exam-part"><div class="exam-part-title">PHẦN III – Trả lời ngắn (${exam.part3.length} câu)</div><div id="part3"></div></div>
+    <div class="row" style="justify-content:flex-end"><button class="btn-main" onclick="submitExam()">Nộp bài</button></div>`;
+  const p1 = $('#part1');
+  exam.part1.forEach((q,i)=>{
+    const ans = examState.answers['p1-'+i];
+    const div = document.createElement('div'); div.style.marginBottom='18px';
+    div.innerHTML = `<div style="display:flex;align-items:flex-start"><span class="q-num">${i+1}</span><div style="flex:1"><div class="q-text">${q.q}</div><div class="opts"></div></div></div>`;
+    const optsDiv = div.querySelector('.opts');
+    q.opts.forEach((opt,j)=>{
+      const lbl = document.createElement('label');
+      lbl.className = 'option' + (ans === j ? ' selected' : '');
+      lbl.innerHTML = `<input type="radio" name="p1-${i}" ${ans===j?'checked':''}><span>${opt}</span>`;
+      lbl.querySelector('input').addEventListener('change', ()=>{
+        examState.answers['p1-'+i] = j;
+        $$(`input[name="p1-${i}"]`).forEach(el=>el.closest('.option').classList.remove('selected'));
+        lbl.classList.add('selected');
+      });
+      optsDiv.appendChild(lbl);
+    });
+    p1.appendChild(div);
+  });
+  const p2 = $('#part2');
+  exam.part2.forEach((q,i)=>{
+    const div = document.createElement('div'); div.style.marginBottom='20px';
+    div.innerHTML = `<div style="display:flex;align-items:flex-start;margin-bottom:6px"><span class="q-num">${i+1}</span><div class="q-text">${q.intro}</div></div><div class="tf-list"></div>`;
+    const list = div.querySelector('.tf-list');
+    q.stmts.forEach((s,j)=>{
+      const row = document.createElement('div'); row.className = 'tf-row';
+      const cur = examState.answers['p2-'+i+'-'+j];
+      row.innerHTML = `<span style="min-width:20px;font-weight:700">${'abcd'[j]})</span><span class="lab">${s.s}</span>
+        <button class="tf-btn true ${cur===true?'active':''}">Đ</button>
+        <button class="tf-btn false ${cur===false?'active':''}">S</button>`;
+      row.querySelector('.true').addEventListener('click', ()=>{
+        examState.answers['p2-'+i+'-'+j] = true;
+        row.querySelector('.true').classList.add('active');
+        row.querySelector('.false').classList.remove('active');
+      });
+      row.querySelector('.false').addEventListener('click', ()=>{
+        examState.answers['p2-'+i+'-'+j] = false;
+        row.querySelector('.false').classList.add('active');
+        row.querySelector('.true').classList.remove('active');
+      });
+      list.appendChild(row);
+    });
+    p2.appendChild(div);
+  });
+  const p3 = $('#part3');
+  exam.part3.forEach((q,i)=>{
+    const div = document.createElement('div'); div.style.marginBottom='14px';
+    const val = examState.answers['p3-'+i] || '';
+    div.innerHTML = `<div style="display:flex;align-items:flex-start;gap:10px"><span class="q-num">${i+1}</span><div style="flex:1"><div class="q-text" style="margin-bottom:6px">${q.q}</div><input type="text" value="${val}" placeholder="Nhập đáp án…"></div></div>`;
+    const inp = div.querySelector('input');
+    inp.addEventListener('input', ()=>{ examState.answers['p3-'+i] = inp.value.trim(); });
+    p3.appendChild(div);
+  });
+  renderMath(root);
+}
+function submitExam(autoSubmit=false){
+  if (!examState.active) return;
+  if (!autoSubmit && !confirm('Em chắc chắn muốn nộp bài?')) return;
+  stopTimer();
+  const exam = EXAMS[examState.examIndex];
+  let s1=0, s2=0, s3=0;
+  const detail = { p1:[], p2:[], p3:[] };
+  exam.part1.forEach((q,i)=>{
+    const ans = examState.answers['p1-'+i];
+    const ok = ans === q.correct;
+    if (ok) s1 += 1;
+    detail.p1.push({ ok, user:ans, correct:q.correct, q });
+  });
+  exam.part2.forEach((q,i)=>{
+    let cc = 0;
+    q.stmts.forEach((s,j)=>{ if (examState.answers['p2-'+i+'-'+j] === s.correct) cc++; });
+    s2 += cc/4;
+    detail.p2.push({ correctCount:cc, q, userVals:q.stmts.map((_,j)=>examState.answers['p2-'+i+'-'+j]) });
+  });
+  exam.part3.forEach((q,i)=>{
+    const raw = examState.answers['p3-'+i] || '';
+    const ok = sameAnswer(raw, q.a);
+    if (ok) s3 += 1;
+    detail.p3.push({ ok, user:raw, correct:q.a, q });
+  });
+  const maxQ = exam.part1.length + exam.part2.length + exam.part3.length;
+  const earned = s1 + s2 + s3;
+  const scaled = parseFloat((earned / maxQ * 10).toFixed(2));
+  const examIdx = examState.examIndex;
+  if (examIdx < 3){
+    progressState.exam['e' + (examIdx+1)] = scaled;
+    saveProgress();
+    renderProgressTree();
+  }
+  examState.active = false;
+  examState.results = detail;
+  renderExamResults(detail, { earned, maxQ, scaled, s1, s2, s3 }, exam);
+}
+function renderExamResults(detail, scores, exam){
+  const root = $('#examContent');
+  root.innerHTML = `
+    <div class="card">
+      <span class="tag ok">Đã nộp bài</span>
+      <h2>Kết quả – ${exam.name}</h2>
+      <div class="score-box">
+        <div class="score-item"><div class="num">${scores.s1.toFixed(2)}</div><div class="lab">Phần I (${exam.part1.length} câu)</div></div>
+        <div class="score-item"><div class="num">${scores.s2.toFixed(2)}</div><div class="lab">Phần II (${exam.part2.length} câu)</div></div>
+        <div class="score-item"><div class="num">${scores.s3.toFixed(2)}</div><div class="lab">Phần III (${exam.part3.length} câu)</div></div>
+      </div>
+      <p style="font-size:1.15rem"><strong>Tổng điểm ước tính: ${scores.scaled} / 10</strong></p>
+      <div class="row">
+        <button class="btn-main" onclick="backToExamList()">Về danh sách đề</button>
+        <button class="btn-ghost" onclick="exportExamPDF(${examState.examIndex}, true)">Xuất PDF (kèm đáp án)</button>
+        <button class="btn-ghost" onclick="exportExamPDF(${examState.examIndex}, false)">Xuất PDF (đề trống)</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="exam-part-title">Phần I – Chi tiết</div>
+      ${detail.p1.map((d,i)=>`
+        <div style="padding:10px 0;border-bottom:1px solid #eee">
+          <div><span class="badge">Câu ${i+1}</span> ${d.ok?'<span style="color:#2E7D32;font-weight:700">Đúng</span>':'<span style="color:#C0392B;font-weight:700">Sai</span>'}</div>
+          <div class="small">${d.q.q}</div>
+          <div class="small">Đáp án: <strong>${d.q.opts[d.correct]}</strong>${d.ok?'':' – Em chọn: '+(d.user!=null?d.q.opts[d.user]:'(bỏ trống)')}</div>
+          ${d.ok?'':`<button class="btn-ghost btn-sm" onclick='askGeminiExamP1(${i})'>Hỏi Gemini</button><div class="ai-out" id="ai-p1-${i}"></div>`}
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="exam-part-title">Phần II – Chi tiết</div>
+      ${detail.p2.map((d,i)=>`
+        <div style="padding:10px 0;border-bottom:1px solid #eee">
+          <div><span class="badge">Câu ${i+1}</span> Đúng ${d.correctCount}/4 ý</div>
+          <div class="small">${d.q.intro}</div>
+          ${d.q.stmts.map((s,j)=>{
+            const ok = d.userVals[j] === s.correct;
+            return `<div class="small">${'abcd'[j]}) ${s.s} → <strong style="color:${ok?'#2E7D32':'#C0392B'}">${ok?'Đúng':'Sai'}</strong> (đáp án: ${s.correct?'Đ':'S'})</div>`;
+          }).join('')}
+          ${d.correctCount<4?`<button class="btn-ghost btn-sm" onclick='askGeminiExamP2(${i})'>Hỏi Gemini</button><div class="ai-out" id="ai-p2-${i}"></div>`:''}
+        </div>`).join('')}
+    </div>
+    <div class="card">
+      <div class="exam-part-title">Phần III – Chi tiết</div>
+      ${detail.p3.map((d,i)=>`
+        <div style="padding:10px 0;border-bottom:1px solid #eee">
+          <div><span class="badge">Câu ${i+1}</span> ${d.ok?'<span style="color:#2E7D32;font-weight:700">Đúng</span>':'<span style="color:#C0392B;font-weight:700">Sai</span>'}</div>
+          <div class="small">${d.q.q}</div>
+          <div class="small">Đáp án: <strong>${fmt(d.correct)}</strong>${d.ok?'':' – Em nhập: '+(d.user||'(bỏ trống)')}</div>
+          ${d.ok?'':`<button class="btn-ghost btn-sm" onclick='askGeminiExamP3(${i})'>Hỏi Gemini</button><div class="ai-out" id="ai-p3-${i}"></div>`}
+        </div>`).join('')}
+    </div>`;
+  renderMath(root);
+}
+function backToExamList(){ examState.active = false; examState.examIndex = null; examState.answers = {}; renderExamPage(); }
+async function askGeminiExamP1(i){
+  const out = $('#ai-p1-'+i); const d = examState.results?.p1?.[i];
+  if (!out||!d) return; out.classList.add('show');
+  const key = getGeminiKey();
+  if (!key){ out.innerHTML = `Chưa có Gemini API key. Vào <a href="#" onclick="gotoPage('settings'); return false;"><strong>Cài đặt &amp; API Key</strong></a> để xem hướng dẫn.`; return; }
+  out.textContent = 'Đang hỏi Gemini…';
+  const prompt = `Bạn là giáo viên Toán THPT. Học sinh làm sai câu trắc nghiệm tích phân.
+Câu hỏi: ${stripMath(d.q.q)}
+Các lựa chọn: ${d.q.opts.map((o,j)=>`${'ABCD'[j]}. ${stripMath(o)}`).join(' | ')}
+Đáp án đúng: ${'ABCD'[d.correct]}
+Học sinh chọn: ${d.user!=null?'ABCD'[d.user]:'(bỏ trống)'}
+Chỉ ra lỗi sai cụ thể 3–4 câu và gợi ý sửa, không đưa lời giải đầy đủ.`;
+  try{ out.textContent = await callGemini(prompt); }catch(e){ out.textContent = 'Lỗi: '+e.message; }
+}
+async function askGeminiExamP2(i){
+  const out = $('#ai-p2-'+i); const d = examState.results?.p2?.[i];
+  if (!out||!d) return; out.classList.add('show');
+  const key = getGeminiKey();
+  if (!key){ out.innerHTML = `Chưa có Gemini API key. Vào <a href="#" onclick="gotoPage('settings'); return false;"><strong>Cài đặt &amp; API Key</strong></a> để xem hướng dẫn.`; return; }
+  out.textContent = 'Đang hỏi Gemini…';
+  const stmtText = d.q.stmts.map((s,j)=>`${'abcd'[j]}) ${stripMath(s.s)} — HS: ${d.userVals[j]===true?'Đ':d.userVals[j]===false?'S':'(bỏ trống)'} — đúng: ${s.correct?'Đ':'S'}`).join('\n');
+  const prompt = `Bạn là giáo viên Toán THPT. Học sinh làm bài Đúng/Sai tích phân.
+Câu hỏi: ${stripMath(d.q.intro)}
+${stmtText}
+Chỉ ra những ý học sinh hiểu sai, giải thích ngắn gọn từng ý, không đưa lời giải đầy đủ.`;
+  try{ out.textContent = await callGemini(prompt); }catch(e){ out.textContent = 'Lỗi: '+e.message; }
+}
+async function askGeminiExamP3(i){
+  const out = $('#ai-p3-'+i); const d = examState.results?.p3?.[i];
+  if (!out||!d) return; out.classList.add('show');
+  const key = getGeminiKey();
+  if (!key){ out.innerHTML = `Chưa có Gemini API key. Vào <a href="#" onclick="gotoPage('settings'); return false;"><strong>Cài đặt &amp; API Key</strong></a> để xem hướng dẫn.`; return; }
+  out.textContent = 'Đang hỏi Gemini…';
+  const prompt = `Bạn là giáo viên Toán THPT. Học sinh làm sai câu trả lời ngắn tích phân.
+Câu hỏi: ${stripMath(d.q.q)}
+Đáp án đúng: ${stripMath(String(fmt(d.correct)))}
+Học sinh nhập: ${d.user||'(bỏ trống)'}
+Chỉ ra lỗi sai cụ thể 3–4 câu và gợi ý sửa, không đưa lời giải đầy đủ.`;
+  try{ out.textContent = await callGemini(prompt); }catch(e){ out.textContent = 'Lỗi: '+e.message; }
+}
+
+/* =========================================================
+   PDF EXPORT
+========================================================= */
+/* SỬA 2: Thêm renderMath(container) để công thức hiển thị đúng trong PDF */
+function exportExamPDF(examIndex, withAnswers=false){
+  const exam = EXAMS[examIndex];
+  const container = $('#printContent');
+  container.innerHTML = `
+    <div class="print-header">
+      <h1>ĐỀ KIỂM TRA – ỨNG DỤNG TÍCH PHÂN TÍNH DIỆN TÍCH HÌNH PHẲNG</h1>
+      <p><strong>${exam.name}</strong> · Thời gian: 90 phút · ${exam.part1.length + exam.part2.length + exam.part3.length} câu</p>
+      <p>Họ và tên: .................................................... Lớp: ...............</p>
+      <p style="margin-top:2mm;font-size:9pt;color:#555;font-style:italic">Biên soạn: Thầy Nguyễn Hữu Trung – THPT Trần Phú – 0964 848 989</p>
+    </div>
+    <h2>PHẦN I – TRẮC NGHIỆM (${exam.part1.length} câu)</h2>
+    ${exam.part1.map((q,i)=>`
+      <div style="margin-bottom:10px">
+        <div><strong>Câu ${i+1}.</strong> ${q.q}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px 0 0 16px">
+          ${q.opts.map((o,j)=>`<div>${'ABCD'[j]}. ${o}</div>`).join('')}
+        </div>
+      </div>`).join('')}
+    <h2 style="margin-top:14px">PHẦN II – ĐÚNG/SAI (${exam.part2.length} câu)</h2>
+    ${exam.part2.map((q,i)=>`
+      <div style="margin-bottom:10px">
+        <div><strong>Câu ${i+1}.</strong> ${q.intro}</div>
+        ${q.stmts.map((s,j)=>`<div style="margin-left:16px">${'abcd'[j]}) ${s.s} &nbsp;&nbsp; [  ] Đ &nbsp; [  ] S</div>`).join('')}
+      </div>`).join('')}
+    <h2 style="margin-top:14px">PHẦN III – TRẢ LỜI NGẮN (${exam.part3.length} câu)</h2>
+    ${exam.part3.map((q,i)=>`<div style="margin-bottom:10px"><strong>Câu ${i+1}.</strong> ${q.q}<br>Đáp án: ....................................................</div>`).join('')}
+    ${withAnswers ? `
+      <div class="page-break"></div>
+      <div class="print-header"><h1>ĐÁP ÁN</h1></div>
+      <h2>Phần I</h2>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+        ${exam.part1.map((q,i)=>`<div>Câu ${i+1}: ${'ABCD'[q.correct]}</div>`).join('')}
+      </div>
+      <h2 style="margin-top:14px">Phần II</h2>
+      ${exam.part2.map((q,i)=>`<div><strong>Câu ${i+1}:</strong> ${q.stmts.map((s,j)=>`${'abcd'[j]}) ${s.correct?'Đ':'S'}`).join(' · ')}</div>`).join('')}
+      <h2 style="margin-top:14px">Phần III</h2>
+      ${exam.part3.map((q,i)=>`<div>Câu ${i+1}: ${fmt(q.a)}</div>`).join('')}
+    `:''}
+    <div class="print-footer">— Hết —<br>Biên soạn: Thầy Nguyễn Hữu Trung – THPT Trần Phú – 0964 848 989</div>`;
+  container.style.display = 'block';
+  renderMath(container);   // ⬅️ SỬA 2: render công thức trước khi in
+  const main = document.querySelector('main');
+  const header = document.querySelector('header');
+  const timer = document.querySelector('.timer');
+  const oldMainDisplay = main.style.display;
+  const oldHeaderDisplay = header.style.display;
+  main.style.display = 'none';
+  header.style.display = 'none';
+  if (timer) timer.style.display = 'none';
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>{
+      container.style.display = 'none';
+      main.style.display = oldMainDisplay;
+      header.style.display = oldHeaderDisplay;
+      if (timer) timer.style.display = '';
+    }, 400);
+  }, 100);
+}
+function exportTeacherExamPDF(){
+  const t = getTeacherExams();
+  if (t.length === 0){ alert('Chưa có câu hỏi giáo viên.'); return; }
+  const virtual = {
+    name:'Đề giáo viên',
+    part1: t.filter(x=>x.type==='mcq').map(x=>({q:x.q, opts:x.opts, correct:x.correct})),
+    part2: t.filter(x=>x.type==='tf').map(x=>({intro:x.intro, stmts:x.stmts})),
+    part3: t.filter(x=>x.type==='short').map(x=>({q:x.q, a:x.a}))
+  };
+  EXAMS.push(virtual);
+  const idx = EXAMS.length - 1;
+  exportExamPDF(idx, false);
+}
+
+/* =========================================================
+   TEACHER MODE
+========================================================= */
+function getTeacherBank(){
+  try{ return JSON.parse(localStorage.getItem('teacherBank')||'{"mcq":[],"tf":[],"short":[]}'); }
+  catch(_){ return {mcq:[],tf:[],short:[]}; }
+}
+function saveTeacherBank(b){ localStorage.setItem('teacherBank', JSON.stringify(b)); }
+function getTeacherExams(){
+  const b = getTeacherBank();
+  return [...b.mcq.map(x=>({type:'mcq',...x})), ...b.tf.map(x=>({type:'tf',...x})), ...b.short.map(x=>({type:'short',...x}))];
+}
+function countTeacherByType(){ const b = getTeacherBank(); return { mcq:b.mcq.length, tf:b.tf.length, short:b.short.length }; }
+
+function renderTeacherPage(){
+  const tfContainer = $('#tf-stmts-container');
+  if (tfContainer && tfContainer.children.length === 0){
+    for (let k=0; k<4; k++) addTfStmtRow(k);
+  }
+  renderBankList('all');
+}
+function addTfStmtRow(idx){
+  const c = $('#tf-stmts-container');
+  const div = document.createElement('div');
+  div.className = 'option-row';
+  div.style.marginBottom = '8px';
+  div.innerHTML = `<span class="opt-label">${'abcd'[idx]||'?'})</span>
+    <input type="text" placeholder="Nội dung ý ${'abcd'[idx]||''}">
+    <select style="width:auto;padding:6px 10px"><option value="true">Đúng</option><option value="false">Sai</option></select>`;
+  c.appendChild(div);
+}
+document.addEventListener('click', (e) => {
+  if (e.target.id === 'addTfStmtBtn'){
+    const c = $('#tf-stmts-container');
+    addTfStmtRow(c.children.length);
+  }
+  if (e.target.id === 'addMcqBtn'){
+    const q = $('#mcq-q').value.trim();
+    const opts = ['#mcq-a','#mcq-b','#mcq-c','#mcq-d'].map(s=>$(s).value.trim());
+    if (!q || opts.some(o=>!o)){ alert('Vui lòng nhập đủ câu hỏi và 4 lựa chọn.'); return; }
+    const correct = parseInt($$('input[name="mcq-correct"]').find(r=>r.checked).value);
+    const hint = $('#mcq-hint').value.trim();
+    const b = getTeacherBank();
+    b.mcq.push({ q, opts, correct, hint });
+    saveTeacherBank(b);
+    $('#mcq-q').value=''; ['#mcq-a','#mcq-b','#mcq-c','#mcq-d','#mcq-hint'].forEach(s=>$(s).value='');
+    $$('input[name="mcq-correct"]').forEach((r,i)=>r.checked = i===0);
+    alert('Đã thêm câu trắc nghiệm vào ngân hàng.');
+    renderBankList('all');
+    return;
+  }
+  if (e.target.id === 'addTfBtn'){
+    const intro = $('#tf-intro').value.trim();
+    const rows = $$('#tf-stmts-container .option-row');
+    const stmts = rows.map(r=>({
+      s: r.querySelector('input[type=text]').value.trim(),
+      correct: r.querySelector('select').value === 'true'
+    })).filter(x=>x.s);
+    if (!intro || stmts.length === 0){ alert('Vui lòng nhập câu dẫn và ít nhất 1 ý.'); return; }
+    const b = getTeacherBank();
+    b.tf.push({ intro, stmts });
+    saveTeacherBank(b);
+    $('#tf-intro').value='';
+    $('#tf-stmts-container').innerHTML='';
+    for (let k=0;k<4;k++) addTfStmtRow(k);
+    alert('Đã thêm câu Đúng/Sai vào ngân hàng.');
+    renderBankList('all');
+    return;
+  }
+  if (e.target.id === 'addShortBtn'){
+    const q = $('#short-q').value.trim();
+    const a = $('#short-a').value.trim();
+    const hint = $('#short-hint').value.trim();
+    if (!q || !a){ alert('Vui lòng nhập câu hỏi và đáp án.'); return; }
+    const num = normalizeNumber(a);
+    const ans = isNaN(num) ? a : num;
+    const b = getTeacherBank();
+    b.short.push({ q, a: ans, hint });
+    saveTeacherBank(b);
+    $('#short-q').value=''; $('#short-a').value=''; $('#short-hint').value='';
+    alert('Đã thêm câu trả lời ngắn vào ngân hàng.');
+    renderBankList('all');
+    return;
+  }
+  const tabBtn = e.target.closest('[data-ttab]');
+  if (tabBtn){
+    $$('.teacher-tabs button').forEach(b=>b.classList.toggle('active', b === tabBtn));
+    $$('.teacher-tab-panel').forEach(p=>p.classList.toggle('active', p.dataset.tpanel === tabBtn.dataset.ttab));
+    if (tabBtn.dataset.ttab === 'manage') renderBankList('all');
+  }
+  const filterBtn = e.target.closest('[data-bankfilter]');
+  if (filterBtn){ renderBankList(filterBtn.dataset.bankfilter); }
+  const delBtn = e.target.closest('[data-del]');
+  if (delBtn){
+    const [type, idx] = delBtn.dataset.del.split('-');
+    const b = getTeacherBank();
+    if (b[type]){
+      if (!confirm('Xoá câu hỏi này?')) return;
+      b[type].splice(parseInt(idx), 1);
+      saveTeacherBank(b);
+      renderBankList('all');
+    }
+  }
+  if (e.target.id === 'exportBankBtn'){
+    const b = getTeacherBank();
+    const blob = new Blob([JSON.stringify(b, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'teacher-bank.json';
+    a.click(); URL.revokeObjectURL(url);
+  }
+  if (e.target.id === 'importBankBtn'){ $('#importFile').click(); }
+  if (e.target.id === 'importFile'){
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      try{
+        const data = JSON.parse(ev.target.result);
+        if (!data.mcq || !data.tf || !data.short) throw new Error('Cấu trúc không hợp lệ');
+        if (!confirm('Nhập sẽ THAY THẾ ngân hàng hiện tại. Tiếp tục?')) return;
+        saveTeacherBank(data);
+        alert('Đã nhập ngân hàng.');
+        renderBankList('all');
+      }catch(err){ alert('Lỗi đọc file: ' + err.message); }
+    };
+    reader.readAsText(file);
+  }
+  if (e.target.id === 'clearBankBtn'){
+    if (confirm('Xoá toàn bộ ngân hàng giáo viên?')){
+      saveTeacherBank({mcq:[],tf:[],short:[]});
+      renderBankList('all');
+    }
+  }
+  if (e.target.id === 'makeCustomExamBtn'){
+    const t = getTeacherExams();
+    if (t.length === 0){ alert('Ngân hàng trống. Hãy thêm câu hỏi trước.'); return; }
+    gotoPage('exam');
+    setTimeout(()=>{ startTeacherExam(); }, 300);
+  }
+});
+function renderBankList(filter='all'){
+  const b = getTeacherBank();
+  const total = b.mcq.length + b.tf.length + b.short.length;
+  const countEl = $('#bankCount');
+  if (countEl) countEl.textContent = `Tổng: ${total} câu (${b.mcq.length} TN, ${b.tf.length} Đ/S, ${b.short.length} TL ngắn)`;
+  const list = $('#bankList');
+  if (!list) return;
+  let items = [];
+  if (filter === 'all' || filter === 'mcq') items.push(...b.mcq.map((x,i)=>({type:'mcq', idx:i, data:x})));
+  if (filter === 'all' || filter === 'tf') items.push(...b.tf.map((x,i)=>({type:'tf', idx:i, data:x})));
+  if (filter === 'all' || filter === 'short') items.push(...b.short.map((x,i)=>({type:'short', idx:i, data:x})));
+  if (items.length === 0){ list.innerHTML = '<p class="small">Chưa có câu hỏi nào trong mục này.</p>'; return; }
+  list.innerHTML = items.map(it=>{
+    let body = '';
+    if (it.type === 'mcq'){
+      body = `<div>${it.data.q}</div><div class="small">${it.data.opts.map((o,j)=>`${'ABCD'[j]}. ${o}${j===it.data.correct?' ✓':''}`).join(' · ')}</div>`;
+    } else if (it.type === 'tf'){
+      body = `<div>${it.data.intro}</div><div class="small">${it.data.stmts.map((s,j)=>`${'abcd'[j]}) ${s.s} (${s.correct?'Đ':'S'})`).join(' · ')}</div>`;
+    } else {
+      body = `<div>${it.data.q}</div><div class="small">Đáp án: <strong>${fmt(it.data.a)}</strong></div>`;
+    }
+    return `<div class="bank-item">
+      <div class="bank-head">
+        <span class="bank-type">${it.type==='mcq'?'TN':it.type==='tf'?'Đ/S':'TL ngắn'}</span>
+        <button class="btn-danger btn-sm" data-del="${it.type}-${it.idx}">Xoá</button>
+      </div>
+      ${body}
+    </div>`;
+  }).join('');
+  renderMath(list);
+}
+
+/* =========================================================
+   SETTINGS / GEMINI
+========================================================= */
+function getGeminiKey(){ return sessionStorage.getItem('geminiKey') || ''; }
+function updateKeyStatus(){
+  const k = getGeminiKey(); const el = $('#keyStatus'); if (!el) return;
+  if (k){ el.textContent = '✓ Đã có key (' + k.slice(0,6) + '…).'; el.style.color = '#2E7D32'; }
+  else { el.textContent = 'Chưa có key. Hãy làm theo hướng dẫn ở trên.'; el.style.color = '#C0392B'; }
+}
+async function callGemini(prompt){
+  const key = getGeminiKey();
+  if (!key) throw new Error('Chưa có API key');
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
+  const res = await fetch(url, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({contents:[{parts:[{text:prompt}]}], generationConfig:{temperature:0.3, maxOutputTokens:800}})
+  });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  return data?.candidates?.[0]?.content?.parts?.[0]?.text || 'Không có phản hồi.';
+}
+
+/* =========================================================
+   INIT
+========================================================= */
+document.addEventListener('DOMContentLoaded', () => {
+  loadProgress();
+  try{
+    const saved = JSON.parse(localStorage.getItem('practiceState')||'null');
+    if (saved && saved.results) practiceState.results = saved.results;
+  }catch(_){}
+
+  $$('.nav-links button').forEach(b=>b.addEventListener('click', ()=> gotoPage(b.dataset.page)));
+
+  $$('input[data-know]').forEach(inp => {
+    const key = 'c' + inp.dataset.know;
+    inp.checked = !!progressState.knowledge[key];
+    if (inp.checked) inp.closest('.know-check-wrap').classList.add('checked');
+    inp.addEventListener('change', () => {
+      progressState.knowledge[key] = inp.checked;
+      inp.closest('.know-check-wrap').classList.toggle('checked', inp.checked);
+      saveProgress();
+      renderProgressTree();
+    });
+  });
+
+  const saveBtn = $('#saveKeyBtn');
+  if (saveBtn) saveBtn.addEventListener('click', ()=>{
+    const v = $('#apiKeyInput').value.trim();
+    if (!v.startsWith('AIza')){ $('#keyStatus').textContent = 'Key thường bắt đầu bằng AIza. Em kiểm tra lại nhé.'; $('#keyStatus').style.color = '#C0392B'; return; }
+    sessionStorage.setItem('geminiKey', v); updateKeyStatus();
+    alert('Đã lưu key cho phiên học này. Bây giờ em có thể bấm “Hỏi Gemini” khi làm bài.');
+  });
+  const clearBtn = $('#clearKeyBtn');
+  if (clearBtn) clearBtn.addEventListener('click', ()=>{ sessionStorage.removeItem('geminiKey'); updateKeyStatus(); });
+  const clearProgBtn = $('#clearProgressBtn');
+  if (clearProgBtn) clearProgBtn.addEventListener('click', ()=>{
+    if (confirm('Xoá toàn bộ tiến độ luyện tập và ngân hàng giáo viên?')){
+      localStorage.removeItem('practiceState');
+      localStorage.removeItem('teacherBank');
+      localStorage.removeItem('learningProgress');
+      progressState.knowledge = { c1:false, c2:false, c3:false };
+      progressState.exam = { e1:null, e2:null, e3:null };
+      practiceState.groupIndex = null; practiceState.current = 0; practiceState.results = {};
+      $$('input[data-know]').forEach(inp => { inp.checked = false; inp.closest('.know-check-wrap').classList.remove('checked'); });
+      alert('Đã xoá.');
+    }
+  });
+
+  renderMath();
+  updateKeyStatus();
+  renderProgressTree();
+});
+</script>
+
+</body>
+</html>
